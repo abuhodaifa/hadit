@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اخْتِبَارُ الدَّرْسِ السَّابِعِ: الْحَدِيثُ الْمُسْنَدُ (نُسْخَةٌ مُطَوَّرَةٌ)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=KFGQPC+Uthman+Taha+Naskh:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Bangers&family=Cutive+Mono&family=IBM+Plex+Sans+Arabic:wght@400;700&family=Kalam:wght@400;700&family=Orbitron:wght@400;700&family=Rye&family=Scheherazade+New:wght@400;700&family=Share+Tech+Mono&family=Tajawal:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #eef2f9; --card-bg: #eef2f9; --primary-color: #4a6d8c; --accent-color: #00a99d;
+            --text-color: #3b5266; --border-color: #d1d9e6; --correct-color: #00a99d; --incorrect-color: #e74c3c;
+            --shadow-light: #ffffff; --shadow-dark: #c8d0e0; --gold-color: #d4af37;
+            --neumorphism-shadow: 7px 7px 15px var(--shadow-dark), -7px -7px 15px var(--shadow-light);
+            --neumorphism-shadow-inset: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes slideInNotification { to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOutNotification { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(30px); } }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        /* واجهة تسجيل الدخول */
+       /* ... أكواد CSS السابقة ... */
+
+/* واجهة تسجيل الدخول */
+#login-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.5s ease-in-out;
+}
+.login-card {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: var(--neumorphism-shadow);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative; /* ضروري لتحديد موضع أيقونة الإغلاق */
+}
+/* تنسيقات قسم الترحيب الجديد */
+.welcome-section {
+    margin-bottom: 25px;
+}
+.welcome-section img {
+    width: 80px; /* حجم الصورة */
+    height: auto;
+    margin-bottom: 10px;
+    animation: zoomIn 0.8s ease-out;
+}
+.welcome-section h2 {
+    font-family: 'KFGQPC Uthman Taha Naskh', serif;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.welcome-section p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+/* نهاية تنسيقات قسم الترحيب */
+
+.login-card input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    font-family: inherit;
+    font-size: 1.1rem;
+    text-align: right;
+    background: var(--card-bg);
+    color: var(--text-color);
+    box-shadow: var(--neumorphism-shadow-inset);
+    margin-bottom: 20px;
+    direction: ltr;
+    transition: all 0.3s ease;
+}
+.login-card input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-color);
+}
+.login-card button {
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 15px 30px;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    background: var(--card-bg);
+    box-shadow: var(--neumorphism-shadow);
+    color: var(--text-color);
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+}
+.login-card button:active {
+    box-shadow: var(--neumorphism-shadow-inset);
+    transform: scale(0.98);
+}
+
+        body {
+            font-family: 'KFGQPC Uthman Taha Naskh', serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            padding: 20px; font-size: 1.1rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        body.font-ruqaa, body.font-ruqaa button, body.font-ruqaa h1, body.font-ruqaa h2, body.font-ruqaa p, body.font-ruqaa label, body.font-ruqaa span { font-family: 'Aref Ruqaa', serif; font-weight: 700; }
+        body.font-scheherazade, body.font-scheherazade button, body.font-scheherazade h1, body.font-scheherazade h2, body.font-scheherazade p, body.font-scheherazade label, body.font-scheherazade span { font-family: 'Scheherazade New', serif; font-weight: 700; }
+        body.font-amiri, body.font-amiri button, body.font-amiri h1, body.font-amiri h2, body.font-amiri p, body.font-amiri label, body.font-amiri span { font-family: 'Amiri', serif; font-weight: 700; }
+        body.font-ibm-plex, body.font-ibm-plex button, body.font-ibm-plex h1, body.font-ibm-plex h2, body.font-ibm-plex p, body.font-ibm-plex label, body.font-ibm-plex span { font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; }
+        body.font-tajawal, body.font-tajawal button, body.font-tajawal h1, body.font-tajawal h2, body.font-tajawal p, body.font-tajawal label, body.font-tajawal span { font-family: 'Tajawal', sans-serif; font-weight: 700; }
+        body.font-hacker, body.font-hacker button, body.font-hacker h1, body.font-hacker h2, body.font-hacker p, body.font-hacker label, body.font-hacker span { font-family: 'Cutive Mono', monospace; }
+        body.font-blueprint, body.font-blueprint button, body.font-blueprint h1, body.font-blueprint h2, body.font-blueprint p, body.font-blueprint label, body.font-blueprint span { font-family: 'Cutive Mono', monospace; }
+        body.font-comic, body.font-comic button, body.font-comic h1, body.font-comic h2, body.font-comic p, body.font-comic label, body.font-comic span { font-family: 'Bangers', cursive; font-size: 1.2rem; letter-spacing: 1px; }
+        body.font-notebook, body.font-notebook button, body.font-notebook h1, body.font-notebook h2, body.font-notebook p, body.font-notebook label, body.font-notebook span { font-family: 'Kalam', cursive; font-size: 1.15rem; }
+        body.font-wildwest, body.font-wildwest button, body.font-wildwest h1, body.font-wildwest h2, body.font-wildwest p, body.font-wildwest label, body.font-wildwest span { font-family: 'Rye', cursive; }
+        body.font-uthman, body.font-uthman button, body.font-uthman h1, body.font-uthman h2, body.font-uthman p, body.font-uthman label, body.font-uthman span { font-family: 'KFGQPC Uthman Taha Naskh', serif; font-weight: 400; }
+        body.font-uthman h1, body.font-uthman h2, body.font-uthman strong { font-weight: 700; }
+        body.font-rye, body.font-rye button, body.font-rye h1, body.font-rye h2, body.font-rye p, body.font-rye label, body.font-rye span { font-family: 'Rye', cursive; }
+
+
+        .main-container { width: 100%; max-width: 900px; animation: fadeIn 1s ease-in-out; margin: auto; position: relative; z-index: 2; }
+        .main-container.quiz-active { padding-top: 70px; }
+        .main-header { text-align: center; margin-bottom: 20px; }
+        .main-header h1 { font-family: 'KFGQPC Uthman Taha Naskh', serif; font-size: 3.5rem; color: var(--primary-color); font-weight: 700; }
+        
+        #background-effects-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+        .main-clock-container {
+            font-family: 'KFGQPC Uthman Taha Naskh', serif; font-size: 1.2rem; font-weight: 700; color: var(--primary-color);
+            padding: 15px 25px; margin: 0 auto 30px auto; background: var(--card-bg); border-radius: 20px;
+            box-shadow: var(--neumorphism-shadow); text-align: center; width: fit-content; display: flex;
+            align-items: center; justify-content: center; gap: 15px; animation: zoomIn 0.8s ease-out; white-space: nowrap;
+        }
+        .main-clock-container i { color: var(--accent-color); font-size: 1.3rem; }
+
+        .quiz-setup { padding: 30px 40px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--neumorphism-shadow); text-align: center; animation: zoomIn 0.6s ease-out; }
+        .hadith-display { padding: 25px; margin-bottom: 30px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--neumorphism-shadow); text-align: center; position: relative; border-right: 5px solid var(--gold-color); animation: slideInUp 0.8s ease-out; }
+        .hadith-display i.fa-quote-right { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--border-color); }
+        .hadith-text { font-size: 1.6rem; line-height: 1.8; margin-bottom: 15px; font-weight: 700; }
+        .hadith-source { font-size: 1rem; color: var(--primary-color); font-weight: 700; }
+        
+        .main-setup-btn {
+            font-family: inherit; font-size: 1.4rem; font-weight: 700; padding: 18px 30px; border-radius: 15px; border: none; cursor: pointer;
+            background: var(--card-bg); box-shadow: var(--neumorphism-shadow); color: var(--text-color);
+            display: flex; align-items: center; gap: 15px; width: 100%; justify-content: center; margin-bottom: 25px; transition: all 0.2s ease-in-out;
+        }
+        .main-setup-btn i { font-size: 1.5rem; color: var(--primary-color); transition: all 0.2s ease-in-out; }
+        .main-setup-btn:hover { color: var(--accent-color); }
+        .main-setup-btn:hover i { color: var(--accent-color); }
+        .main-setup-btn:active { box-shadow: var(--neumorphism-shadow-inset); transform: scale(0.98); }
+
+        .quiz-wrapper { display: none; }
+        .stats-and-controls { position: fixed; top: 10px; right: 0; left: 0; margin: auto; width: calc(100% - 40px); max-width: 900px; padding: 15px 25px; background: rgba(238, 242, 249, 0.85); backdrop-filter: blur(8px); z-index: 100; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transform: translateY(-58px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .stats-and-controls:hover, .stats-and-controls.touch-active { transform: translateY(0); }
+        .control-buttons-wrapper { padding-bottom: 15px; opacity: 0; transition: opacity 0.3s ease-in-out 0.1s; }
+        .stats-and-controls:hover .control-buttons-wrapper, .stats-and-controls.touch-active .control-buttons-wrapper { opacity: 1; }
+        .control-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+        .control-btn { padding: 8px 12px; font-family: inherit; font-weight: 700; font-size: 1rem; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s ease-in-out; background: var(--card-bg); color: var(--primary-color); box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); }
+        .control-btn:hover { color: var(--accent-color); }
+        .control-btn:active { transform: scale(0.95); box-shadow: var(--neumorphism-shadow-inset); }
+        .control-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        
+        .control-menu-container { position: relative; display: inline-block; }
+        .control-menu {
+            position: absolute; top: 105%; left: 0;
+            background: var(--card-bg); border-radius: 15px; box-shadow: var(--neumorphism-shadow);
+            padding: 10px; z-index: 101;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.3s ease;
+            transform-origin: top center;
+            display: grid;
+            gap: 8px;
+            width: 100%;
+            transform: translateY(-10px) scale(0.95);
+        }
+        #export-print-menu { grid-template-columns: 1fr 1fr; min-width: 320px; left: 50%; transform: translateX(-50%) translateY(-10px) scale(0.9); }
+        .control-menu.visible { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        #export-print-menu.visible { transform: translateX(-50%) translateY(0) scale(1); }
+        .control-menu button {
+            font-family: inherit; font-size: 0.9rem; background-color: var(--card-bg);
+            color: var(--text-color); border: none; border-radius: 12px;
+            padding: 10px; margin: 0; box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            cursor: pointer; transition: all 0.2s ease-in-out; display: flex;
+            align-items: center; justify-content: center;
+            gap: 8px; text-align: center; line-height: 1.3;
+        }
+        #export-print-menu button { flex-direction: column; gap: 5px; }
+        .control-menu button:hover { color: var(--accent-color); transform: translateY(-2px); }
+        .control-menu button:active { transform: scale(0.98); box-shadow: var(--neumorphism-shadow-inset); }
+        .control-menu button i { font-size: 1.2rem; margin: 0; width: auto; color: var(--primary-color); transition: color 0.2s ease-in-out; }
+        #export-print-menu button i { font-size: 1.6rem; }
+        .control-menu button:hover i { color: var(--accent-color); }
+        .control-menu button.selected { background-color: var(--accent-color); color: white; }
+        .control-menu button.selected i { color: white; }
+
+        .visible-bar { display: flex; align-items: center; gap: 20px; }
+        .stat-item { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); white-space: nowrap; }
+        .stat-item i { margin-left: 8px; color: var(--accent-color); }
+        .progress-container { flex-grow: 1; height: 6px; background-color: var(--border-color); border-radius: 3px; overflow: hidden; box-shadow: var(--neumorphism-shadow-inset); }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-color), #00c7b6); border-radius: 3px; transition: width 0.5s ease-out; }
+        .global-timer span { color: var(--primary-color); }
+        .global-timer i { color: var(--accent-color); }
+        .global-timer.low-time, .global-timer.low-time span, .global-timer.low-time i { color: var(--incorrect-color) !important; animation: pulse 1s infinite; }
+        #lives-display i { color: var(--incorrect-color); animation: pulse 1.5s infinite; }
+
+        #quiz-container { display: grid; gap: 25px; }
+        .question-card { background: var(--card-bg); border-radius: 20px; box-shadow: var(--neumorphism-shadow); overflow: hidden; opacity: 0; animation: slideInUp 0.6s ease-out forwards; padding: 25px; }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .question-number { font-size: 1.2rem; font-weight: 700; background-color: var(--primary-color); color: white; min-width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; }
+        .header-btn { background: none; border: none; font-size: 1rem; color: var(--border-color); cursor: pointer; transition: all 0.2s; padding: 5px; border-radius: 8px; margin-right: 5px; }
+        .header-btn:hover { color: var(--primary-color); background-color: var(--border-color); transform: scale(1.1); }
+        .header-btn:disabled { cursor: wait; }
+        .header-btn .fa-star.favorited { color: var(--gold-color); }
+        .question-text { font-size: 1.4rem; line-height: 1.8; font-weight: 700; flex-grow: 1; }
+        .card-actions { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
+        .action-btn { font-family: inherit; font-size: 1.2rem; font-weight: 700; padding: 12px 0; width: 130px; border-radius: 15px; border: none; cursor: pointer; transition: all 0.2s ease-in-out; background: var(--card-bg); box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); }
+        .action-btn:hover:not(:disabled) { transform: translateY(-2px); }
+        .action-btn:active { transform: scale(0.95); box-shadow: var(--neumorphism-shadow-inset); }
+        .action-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+        .result-container { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.6s ease-out; text-align: center; }
+        .question-card.revealed .result-container { max-height: 200px; opacity: 1; margin-top: 25px; }
+        .result-icon { font-size: 3rem; margin-bottom: 10px; }
+        .result-icon.correct { color: var(--correct-color); } .result-icon.incorrect { color: var(--incorrect-color); }
+        .correction-text { font-size: 1.2rem; font-weight: 700; }
+        .correction-text.correct { color: var(--correct-color); } .correction-text.incorrect { color: var(--incorrect-color); }
+
+        .simple-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.5s ease; z-index: 1001; }
+        .simple-modal.visible { opacity: 1; visibility: visible; z-index: 1002;}
+        .simple-modal.on-top { z-index: 1003; }
+        .simple-modal .modal-content { background: var(--bg-color); padding: 30px; border-radius: 20px; text-align: right; width: 90%; max-width: 600px; box-shadow: var(--neumorphism-shadow); animation: zoomIn 0.5s ease; position: relative; max-height: 80vh; overflow-y: auto;}
+        .simple-modal .modal-content-large { max-width: 900px; }
+        .simple-modal .modal-content { scrollbar-width: none; -ms-overflow-style: none; }
+        .simple-modal .modal-content::-webkit-scrollbar { display: none; }
+        .simple-modal h2 { font-family: 'KFGQPC Uthman Taha Naskh', serif; font-size: 2.2rem; color: var(--primary-color); margin-bottom: 20px; font-weight: 700;}
+        .simple-modal h3 { font-family: inherit; font-size: 1.6rem; color: var(--accent-color); margin-bottom: 15px; margin-top:20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);}
+        .simple-modal p { font-size: 1.3rem; line-height: 2; margin-bottom: 15px; }
+        .simple-modal ul { padding-right: 25px; }
+        .simple-modal .modal-close-btn { position: absolute; top: 15px; left: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-color); cursor: pointer; transition: transform 0.2s; }
+        .simple-modal .modal-close-btn:hover { transform: scale(1.2); }
+
+        .modal-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 25px; }
+        .modal-buttons .control-btn { font-size: 1.1rem; width: 100%; height: 55px; padding: 5px; }
+
+        .settings-section { margin-top: 20px; }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .settings-section-btn {
+            font-family: inherit; font-size: 1.1rem; background-color: var(--card-bg); color: var(--text-color);
+            border: none; border-radius: 12px; padding: 15px; text-align: center;
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
+            cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+        }
+        .settings-section-btn:hover { background-color: var(--border-color); color: var(--accent-color); }
+        .settings-section-btn.selected { background-color: var(--accent-color); color: white; box-shadow: var(--neumorphism-shadow-inset); }
+        .settings-section-btn i { font-size: 1.2rem; }
+
+        .slider-container { margin: 15px 0 25px 0; }
+        .slider-container label { font-size: 1.2rem; font-weight: 700; }
+        .slider-container span { color: var(--accent-color); font-weight: 700; font-size: 1.5rem; }
+        .slider-container input[type="range"] { width: 100%; margin-top: 15px; -webkit-appearance: none; appearance: none; height: 10px; background: var(--border-color); border-radius: 5px; box-shadow: var(--neumorphism-shadow-inset); }
+        .slider-container input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; background: var(--accent-color); border-radius: 50%; cursor: pointer; box-shadow: var(--neumorphism-shadow); }
+
+        #notification-container { position: fixed; bottom: 20px; left: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+        .notification {
+            padding: 15px 20px; border-radius: 15px; background: var(--card-bg); box-shadow: var(--neumorphism-shadow);
+            color: var(--text-color); font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 15px;
+            opacity: 0; transform: translateX(-30px); animation: slideInNotification 0.5s forwards;
+        }
+        .notification.fade-out { animation: slideOutNotification 0.5s forwards; }
+        .notification i { font-size: 1.3rem; }
+        .notification.success i { color: var(--correct-color); }
+        .notification.info i { color: var(--primary-color); }
+        .notification.error i { color: var(--incorrect-color); }
+
+        #pause-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(238, 242, 249, 0.7); backdrop-filter: blur(8px); z-index: 1001; display: none; justify-content: center; align-items: center; cursor: pointer; animation: fadeIn 0.3s ease; }
+        #pause-content { text-align: center; color: var(--primary-color); }
+        #pause-content i { font-size: 5rem; margin-bottom: 20px; }
+        #pause-content h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; }
+        #pause-content p { font-size: 1.5rem; }
+
+        .stats-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-bottom: 25px; text-align: center; }
+        .summary-item { background-color: var(--bg-color); padding: 15px; border-radius: 15px; box-shadow: var(--neumorphism-shadow-inset); }
+        .summary-item .value { font-size: 1.8rem; font-weight: 700; display: block; }
+        .summary-item .label { font-size: 1rem; color: var(--text-color); }
+        
+        .shortcut-item { border-bottom: 1px solid var(--border-color); padding: 12px 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .shortcut-item strong { color: var(--accent-color); font-size: 1.2rem; }
+        .shortcut-key-btn { background-color: var(--border-color); color: var(--primary-color); padding: 5px 12px; border-radius: 8px; font-size: 1.1rem; box-shadow: var(--neumorphism-shadow-inset); font-family: monospace; border: none; cursor: pointer; min-width: 80px; text-align: center; }
+        .shortcut-key-btn:hover { background-color: var(--shadow-dark); }
+        .shortcut-key-btn.listening { background-color: var(--accent-color); color: white; }
+
+        .color-swatches { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
+        .color-swatch { width: 40px; height: 40px; border-radius: 50%; cursor: pointer; border: 3px solid var(--border-color); transition: transform 0.2s; }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.selected { border-color: var(--primary-color); transform: scale(1.15); box-shadow: var(--neumorphism-shadow-inset); }
+
+        #print-content { display: none; }
+        .pdf-export-prepare { display: block !important; position: absolute; left: -9999px; top: 0; background-color: #fff; color: #000; font-family: 'KFGQPC Uthman Taha Naskh', serif; width: 210mm; padding: 15mm; font-size: 12pt; }
+        .pdf-export-prepare h1 { font-size: 22pt; text-align: center; margin-bottom: 20px; color: #000; page-break-after: avoid; }
+        .pdf-export-prepare div { page-break-inside: avoid; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        .pdf-export-prepare p { font-size: 14pt; line-height: 1.7; }
+        .pdf-export-prepare .print-answer { color: #555; font-size: 11pt; }
+
+        /* ====================================================== */
+        /* ==   أكواد مولد المظهر الجديد (واجهة كلاسيكية)      == */
+        /* ====================================================== */
+        .theme-generator {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .generator-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .generator-group label {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        .generator-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            -webkit-appearance: none;
+            appearance: none;
+            background-position: left 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 16px 12px;
+            background-color: var(--card-bg);
+            border: none;
+            box-shadow: var(--neumorphism-shadow-inset);
+            color: var(--text-color);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234a6d8c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            cursor: pointer;
+        }
+        body.palette-dark .generator-group select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a9c1d8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+        }
+
+        /* ====================================================== */
+        /* ==            أكواد محرك المظاهر تبدأ هنا            == */
+        /* ====================================================== */
+
+        /* --- اللوحات اللونية --- */
+        body.palette-dark { --bg-color: #1e2125; --card-bg: #2c3035; --text-color: #d1d9e6; --primary-color: #a9c1d8; --border-color: #40454c; --shadow-light: #3a3f45; --shadow-dark: #121416; }
+        body.palette-ocean { --bg-color: #e6f7ff; --card-bg: #ffffff; --text-color: #005086; --primary-color: #0077c2; --border-color: #b3e0ff; --shadow-light: #ffffff; --shadow-dark: #ccebff; }
+        body.palette-coffee { --bg-color: #f4ecd8; --card-bg: #ffffff; --text-color: #5b4636; --primary-color: #8c6f58; --border-color: #e5d9c3; --shadow-light: #ffffff; --shadow-dark: #d1c4b0; }
+        body.palette-particle-grid { --bg-color: #000020; --card-bg: rgba(10,10,40,0.7); --text-color: #e0e0ff; --primary-color: #ffffff; --border-color: #303060; --shadow-light: #1a1a4a; --shadow-dark: #000000; }
+        body.palette-water-ripple { --bg-color: #005f73; --card-bg: rgba(255,255,255,0.1); --text-color: #ffffff; --primary-color: #e9d8a6; --border-color: rgba(255,255,255,0.2); --shadow-light: #007a93; --shadow-dark: #004453; }
+        body.palette-ink-bloom { --bg-color: #f0f0f0; --card-bg: rgba(255,255,255,0.7); --text-color: #333333; --header-color: #000000; --border-color: #cccccc; --accent-color: #d90429; --shadow-light: #ffffff; --shadow-dark: #dcdcdc; }
+        body.palette-hacker { --bg-color: #000000; --card-bg: rgba(0, 20, 0, 0.85); --text-color: #00ff41; --primary-color: #a2ffbc; --border-color: #004d14; --accent-color: #ffffff; }
+        body.palette-blueprint { --bg-color: #0a2d52; --card-bg: rgba(15, 61, 110, 0.8); --text-color: #d0e8ff; --primary-color: #ffffff; --border-color: rgba(173, 216, 230, 0.4); --accent-color: #00ffff; }
+        body.palette-comic { --bg-color: #f0f8ff; --card-bg: #ffffff; --text-color: #000000; --primary-color: #0050d7; --border-color: #cccccc; --accent-color: #ff2e2e; }
+        body.palette-notebook { --bg-color: #fdfaf2; --card-bg: #ffffff; --text-color: #333a45; --primary-color: #232830; --border-color: #d9dde2; --accent-color: #007aff; }
+        body.palette-wildwest { --bg-color: #f5e4c3; --card-bg: #fff8e1; --text-color: #5d4037; --primary-color: #3e2723; --border-color: #d7ccc8; --accent-color: #c0392b; }
+        body.palette-sandstorm { --bg-color: #f4e4b6; --card-bg: rgba(255, 248, 225, 0.8); --text-color: #8b4513; --primary-color: #d2691e; --border-color: rgba(210, 105, 30, 0.4); --accent-color: #a0522d; }
+
+        /* --- الخلفيات --- */
+        .bg-particle-grid, .bg-water-ripple, .bg-ink-bloom, .bg-sandstorm { background-color: var(--bg-color); }
+        .bg-gradient { background-image: linear-gradient(120deg, var(--bg-color) 0%, var(--border-color) 100%) !important; }
+        .bg-grid { background-color: var(--bg-color); background-image: linear-gradient(rgba(173, 216, 230, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(173, 216, 230, 0.2) 1px, transparent 1px); background-size: 20px 20px; }
+        .bg-halftone { background-color: var(--bg-color); background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px); background-size: 10px 10px; }
+        .bg-notebook { background-color: var(--bg-color); background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 29px, #d9dde2 30px); }
+        .bg-wildwest { background: #d2b48c url(https://www.transparenttextures.com/patterns/wood-pattern.png); }
+
+        /* --- عمق التصميم --- */
+        .depth-flat [class*="-btn"], .depth-flat .quiz-setup, .depth-flat .hadith-display, .depth-flat .question-card,
+        .depth-flat .main-clock-container, .depth-flat .modal-content, .depth-flat .control-menu,
+        .depth-flat .notification {
+            box-shadow: none !important;
+            border: 1px solid var(--border-color);
+        }
+        .depth-flat [class*="-btn"]:active { transform: scale(0.98); }
+        .depth-flat .stats-and-controls { box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+
+        /* --- أنماط العناصر --- */
+        .style-brutalism .main-setup-btn, .style-brutalism .quiz-setup, .style-brutalism .hadith-display, .style-brutalism .question-card, .style-brutalism .control-btn, .style-brutalism .settings-section-btn, .style-brutalism .main-clock-container, .style-brutalism .modal-content, .style-brutalism .control-menu, .style-brutalism .notification { border-radius: 8px; border: 3px solid var(--text-color); box-shadow: 5px 5px 0px var(--text-color); transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out; }
+        .style-brutalism .main-setup-btn:hover, .style-brutalism .control-btn:hover, .style-brutalism .settings-section-btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0px var(--text-color); }
+        .style-brutalism .main-setup-btn:active, .style-brutalism .control-btn:active, .style-brutalism .settings-section-btn:active { transform: translate(5px, 5px); box-shadow: none; }
+        .style-brutalism .action-btn { border-radius: 8px; border: 3px solid var(--text-color); box-shadow: none; }
+        .style-brutalism .action-btn:active { transform: translate(3px, 3px); box-shadow: none; }
+        
+        .style-glass .main-setup-btn, .style-glass .quiz-setup, .style-glass .hadith-display, .style-glass .question-card, .style-glass .control-btn, .style-glass .settings-section-btn, .style-glass .main-clock-container, .style-glass .modal-content, .style-glass .control-menu, .style-glass .notification { background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        body.palette-dark.style-glass [class*="-btn"], body.palette-dark.style-glass .quiz-setup, body.palette-dark.style-glass .hadith-display, body.palette-dark.style-glass .question-card, body.palette-dark.style-glass .main-clock-container, body.palette-dark.style-glass .modal-content, body.palette-dark.style-glass .control-menu, body.palette-dark.style-glass .notification { background-color: rgba(44, 48, 53, 0.5); border-color: rgba(255, 255, 255, 0.1); }
+        body.palette-particle-grid.style-glass [class*="-btn"], body.palette-particle-grid.style-glass .quiz-setup, body.palette-particle-grid.style-glass .hadith-display, body.palette-particle-grid.style-glass .question-card, body.palette-particle-grid.style-glass .main-clock-container, body.palette-particle-grid.style-glass .modal-content, body.palette-particle-grid.style-glass .control-menu, body.palette-particle-grid.style-glass .notification,
+        body.palette-water-ripple.style-glass [class*="-btn"], body.palette-water-ripple.style-glass .quiz-setup, body.palette-water-ripple.style-glass .hadith-display, body.palette-water-ripple.style-glass .question-card, body.palette-water-ripple.style-glass .main-clock-container, body.palette-water-ripple.style-glass .modal-content, body.palette-water-ripple.style-glass .control-menu, body.palette-water-ripple.style-glass .notification { background-color: rgba(0, 0, 0, 0.2); border-color: rgba(255,255,255,0.1); }
+
+        .style-material [class*="-btn"], .style-material .quiz-setup, .style-material .hadith-display, .style-material .question-card, .style-material .main-clock-container, .style-material .modal-content, .style-material .control-menu, .style-material .notification { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1); border: 1px solid var(--border-color); }
+        .style-material [class*="-btn"]:hover { box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); }
+
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.9; } }
+        .style-hacker [class*="-btn"], .style-hacker h1, .style-hacker p, .style-hacker label, .style-hacker span { text-shadow: 0 0 5px var(--text-color); animation: flicker 0.15s infinite; }
+        
+        .style-comic [class*="-btn"], .style-comic .quiz-setup, .style-comic .hadith-display, .style-comic .question-card, .style-comic .main-clock-container, .style-comic .modal-content, .style-comic .control-menu, .style-comic .notification { border: 3px solid var(--text-color); box-shadow: 5px 5px 0 var(--accent-color); border-radius: 4px; }
+        
+        .style-notebook [class*="-btn"], .style-notebook .quiz-setup, .style-notebook .hadith-display, .style-notebook .question-card, .style-notebook .main-clock-container, .style-notebook .modal-content, .style-notebook .control-menu, .style-notebook .notification { border: 1px solid var(--border-color); box-shadow: 2px 2px 5px rgba(0,0,0,0.08); border-radius: 4px; }
+        
+        .style-wildwest [class*="-btn"], .style-wildwest .quiz-setup, .style-wildwest .hadith-display, .style-wildwest .question-card, .style-wildwest .main-clock-container, .style-wildwest .modal-content, .style-wildwest .control-menu, .style-wildwest .notification { border: 4px double var(--text-color); box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+        
+        .style-perspective .main-container { perspective: 1000px; }
+        .style-perspective [class*="-btn"], .style-perspective .quiz-setup, .style-perspective .hadith-display, .style-perspective .question-card, .style-perspective .main-clock-container, .style-perspective .modal-content { transform: rotateY(var(--mouse-x, 0)) rotateX(var(--mouse-y, 0)); transition: transform 0.1s linear, box-shadow 0.1s linear; box-shadow: var(--shadow-offset-x, 0px) var(--shadow-offset-y, 0px) 30px rgba(0,0,0,0.3); }
+
+        .main-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin-top: 50px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-color);
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.footer-logo img {
+    width: 50px;
+    height: auto;
+}
+.footer-logo h2 {
+    font-family: 'KFGQPC Uthman Taha Naskh', serif;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+.footer-rights {
+    flex-grow: 1;
+    margin: 10px 20px;
+}
+.footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.footer-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 700;
+}
+.footer-links a:hover {
+    color: var(--accent-color);
+}
+.footer-links i {
+    margin-left: 8px;
+}
+@media (max-width: 768px) {
+    .main-footer {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-logo, .footer-links {
+        justify-content: center;
+    }
+    .footer-rights {
+        margin: 10px 0;
+    }
+}
+        
+    </style>
+</head>
+<body>
+
+    <div id="login-overlay">
+    <div class="login-card">
+        <div class="welcome-section">
+            <img src="img/icon12-removebg-preview.png" alt="Logo">
+            <h2>مرحــبا بطالب العــلم</h2>
+            <p>أدخل كلمة المرور للمتابعة</p>
+        </div>
+        <input type="password" id="password-input" placeholder="كلمة المرور">
+        <button id="login-button">دخول</button>
+    </div>
+</div>
+
+    <canvas id="background-effects-canvas"></canvas>
+
+    <div class="main-container" id="main-container">
+        
+        <div class="quiz-wrapper" id="quiz-wrapper">
+             <section class="stats-and-controls" id="stats-and-controls">
+                <div class="control-buttons-wrapper">
+                    <div class="control-buttons">
+                        <button class="control-btn" data-action="toggle-pause" id="pause-resume-btn" style="display: none;" title="إِيقَافٌ مُؤَقَّتٌ / اسْتِئْنَافٌ"><i class="fa-solid fa-pause"></i></button>
+                        <button class="control-btn" data-action="show-all-answers" id="show-all-btn" title="إِظْهَارُ كُلِّ الْإِجَابَاتِ"><i class="fa-solid fa-eye"></i></button>
+                        <button class="control-btn" data-action="hide-all-answers" id="hide-all-btn" title="إِخْفَاءُ كُلِّ الْإِجَابَاتِ" style="display: none;"><i class="fa-solid fa-eye-slash"></i></button>
+                        <button class="control-btn" data-action="reset-quiz" title="اخْتِبَارٌ جَدِيدٌ"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+                        <div class="control-menu-container">
+                            <button class="control-btn" data-toggles="export-print-menu" title="إِخْرَاجُ مَادَّةِ الِاخْتِبَارِ"><i class="fa-solid fa-share-square"></i></button>
+                            <div class="control-menu" id="export-print-menu">
+                                <button data-action="print-questions"><i class="fa-solid fa-print"></i> <span>اسْتِنْسَاخُ<br/>الْأَسْئِلَةِ</span></button>
+                                <button data-action="print-answers"><i class="fa-solid fa-paste"></i> <span>اسْتِنْسَاخُ<br/>الْأَجْوِبَةِ</span></button>
+                                <button data-action="export-pdf-questions"><i class="fa-solid fa-file-pdf"></i> <span>إِخْرَاجُ الْأَسْئِلَةِ<br/>(PDF)</span></button>
+                                <button data-action="export-pdf-answers"><i class="fa-solid fa-file-invoice"></i> <span>إِخْرَاجُ الْأَجْوِبَةِ<br/>(PDF)</span></button>
+                                <button data-action="export-txt-questions"><i class="fa-solid fa-file-lines"></i> <span>إِخْرَاجُ الْأَسْئِلَةِ<br/>(TXT)</span></button>
+                                <button data-action="export-txt-answers"><i class="fa-solid fa-file-alt"></i> <span>إِخْرَاجُ الْأَجْوِبَةِ<br/>(TXT)</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="visible-bar">
+                    <div class="stat-item" id="score-container"><i class="fa-solid fa-star"></i><span id="score-text">النَّتِيجَةُ: ٠ / ٠</span></div>
+                    <div class="progress-container"><div class="progress-bar" id="progress-bar-top"></div></div>
+                    <div class="stat-item global-timer" id="global-timer" style="display: none;">
+                        <i class="fa-solid fa-clock"></i><span id="global-timer-display">--:--</span>
+                    </div>
+                    <div class="stat-item" id="lives-display" style="display: none;">
+                            <i class="fa-solid fa-heart"></i><span id="lives-count">٣</span>
+                        </div>
+                </div>
+            </section>
+        </div>
+       
+        <header class="main-header"><h1>اخْتِبَارُ الدَّرْسِ السَّابِعِ: الْحَدِيثُ الْمُسْنَدُ</h1></header>
+
+        <div class="main-clock-container" id="desktop-clock">
+            <i class="fa-solid fa-calendar-alt"></i><span id="desktop-clock-display"></span>
+        </div>
+
+        <section class="quiz-setup" id="quiz-setup">
+            <div class="hadith-display" id="hadith-display-start"></div>
+            
+            <button class="main-setup-btn" data-action="open-modal" data-modal-id="quiz-setup-modal" title="اخْتِيَارُ نَوْعِ الِاخْتِبَارِ وَخِيَارَاتِهِ.">
+                <i class="fa-solid fa-sliders"></i>
+                <span>تَهْيِئَةُ الِاخْتِبَارِ</span>
+            </button>
+            <button class="main-setup-btn" data-action="open-modal" data-modal-id="export-modal" title="إِخْرَاجُ الْمَادَّةِ الْعِلْمِيَّةِ">
+                <i class="fa-solid fa-file-export"></i>
+                <span>الْإِخْرَاجُ الشَّامِلُ</span>
+            </button>
+             <button class="main-setup-btn" data-action="open-modal" data-modal-id="settings-modal" style="margin-bottom: 0;" title="الْإِعْدَادَاتُ الشَّامِلَةُ">
+                <i class="fa-solid fa-cog"></i>
+                <span>الْإِعْدَادَاتُ الشَّامِلَةُ</span>
+            </button>
+        </section>
+
+        <main id="quiz-container"></main>
+    </div>
+
+    <!-- Modals -->
+    <div id="quiz-setup-modal" class="simple-modal">
+        <div class="modal-content">
+             <button class="modal-close-btn">&times;</button>
+             <h2><i class="fa-solid fa-sliders"></i> تَهْيِئَةُ الِاخْتِبَارِ</h2>
+             <div class="settings-grid" style="margin-bottom: 25px; grid-template-columns: repeat(3, 1fr);">
+                 <button class="settings-section-btn quiz-type-selector" data-action="select-quiz-type" data-type="learning"><i class="fa-solid fa-graduation-cap"></i> وَضْعُ التَّعَلُّمِ</button>
+                 <button class="settings-section-btn quiz-type-selector" data-action="select-quiz-type" data-type="test"><i class="fa-solid fa-list-ol"></i> وَضْعُ الِاخْتِبَارِ</button>
+                 <button class="settings-section-btn quiz-type-selector" data-action="select-quiz-type" data-type="competition"><i class="fa-solid fa-user-friends"></i> وَضْعُ الْمُنَافَسَةِ</button>
+             </div>
+
+             <div id="learning-modes-container" style="display: none;">
+                <h3>أَنْوَاعُ التَّعَلُّمِ</h3>
+                 <div class="settings-grid">
+                     <button class="settings-section-btn quiz-mode-btn" data-action="select-quiz-mode" data-mode="flashcard"><i class="fa-solid fa-layer-group"></i> بِطَاقَاتٌ تَعْلِيمِيَّةٌ</button>
+                     <button class="settings-section-btn quiz-mode-btn" data-action="select-quiz-mode" data-mode="learning"><i class="fa-solid fa-book-reader"></i> التَّعَلُّمُ الْمُوَجَّهُ</button>
+                 </div>
+             </div>
+
+             <div id="test-modes-container" style="display: none;">
+                <h3>أَنْوَاعُ الِاخْتِبَارِ</h3>
+                 <div class="settings-grid">
+                     <button class="settings-section-btn quiz-mode-btn" data-action="select-quiz-mode" data-mode="normal"><i class="fa-solid fa-file-alt"></i> اخْتِبَارٌ قِيَاسِيٌّ</button>
+                     <button class="settings-section-btn quiz-mode-btn" data-action="select-quiz-mode" data-mode="favorites"><i class="fa-solid fa-star"></i> اخْتِبَارُ الْمُعَلَّمَاتِ</button>
+                 </div>
+                 <div id="tf-slider-container" class="slider-container" style="display: none;">
+                     <label for="tf-question-count-slider">عَدَدُ الْأَسْئِلَةِ: <span id="tf-question-count-value">2</span></label>
+                     <input type="range" id="tf-question-count-slider" min="1" max="2" value="2">
+                 </div>
+                 <div id="timer-options-container" style="display:none;">
+                     <h3><i class="fa-solid fa-flag-checkered"></i> وَضْعُ الْجَوْلَةِ</h3>
+                     <div class="settings-grid" id="timer-options">
+                         <button class="settings-section-btn" data-action="select-timer-mode" data-mode="none"><i class="fa-solid fa-ban"></i> جَوْلَةٌ قِيَاسِيَّةٌ</button>
+                         <button class="settings-section-btn" data-action="select-timer-mode" data-mode="suddenDeath"><i class="fa-solid fa-skull-crossbones"></i> التَّحَدِّي الْأَقْصَى</button>
+                         <button class="settings-section-btn" style="grid-column: 1 / -1;" data-action="select-timer-mode" data-mode="marathon"><i class="fa-solid fa-person-running"></i> الْمَارَاثُونُ</button>
+                     </div>
+                 </div>
+                 <div id="marathon-options-container" style="display: none; margin-top: 20px;">
+                     <h4><i class="fa-solid fa-cogs"></i> خِيَارَاتُ التَّحَدِّي</h4>
+                     <div class="settings-grid" style="margin-top: 10px;">
+                         <button class="settings-section-btn selected" data-action="toggle-marathon-timer"><i class="fa-solid fa-clock"></i> <span>الْمُؤَقِّتُ مُفَعَّلٌ</span></button>
+                         <button class="settings-section-btn" data-action="toggle-marathon-lives" id="marathon-lives-btn"><i class="fa-solid fa-heart-crack"></i> <span>الْمُحَاوَلَاتُ مُعَطَّلَةٌ</span></button>
+                     </div>
+                 </div>
+             </div>
+             
+            <div id="competition-modes-container" style="display: none;">
+                <h3><i class="fa-solid fa-cogs"></i> إِعْدَادَاتُ الْمُنَافَسَةِ</h3>
+                <div class="settings-grid" style="gap: 15px; margin-bottom: 20px;">
+                    <div><label for="player1-name">اسْمُ اللَّاعِبِ ١:</label><input type="text" id="player1-name" value="اللَّاعِبُ ١" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); box-shadow: var(--neumorphism-shadow-inset);"/></div>
+                    <div><label for="player2-name">اسْمُ اللَّاعِبِ ٢:</label><input type="text" id="player2-name" value="اللَّاعِبُ ٢" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-color); box-shadow: var(--neumorphism-shadow-inset);"/></div>
+                </div>
+                <div class="slider-container">
+                    <label for="competition-question-count-slider">عَدَدُ الْأَسْئِلَةِ (لِكُلِّ لَاعِبٍ): <span id="competition-question-count-value">1</span></label>
+                    <input id="competition-question-count-slider" max="1" min="1" type="range" value="1"/>
+                </div>
+            </div>
+
+             <div class="modal-buttons" style="display: none;">
+                 <button class="control-btn" data-action="start-quiz-from-setup" id="start-quiz-btn"><i class="fa-solid fa-play"></i> <span id="start-button-text">اِبْدَأ</span></button>
+             </div>
+        </div>
+    </div>
+
+    <div id="final-score-modal" class="simple-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <div style="text-align: center;">
+                <h2 id="final-score-title">أَحْسَنْتَ عَمَلًا!</h2>
+                <p>نَتِيجَتُكَ النِّهَائِيَّةُ هِيَ:</p>
+                <p id="final-score-text"></p>
+                <p id="final-message"></p>
+            </div>
+            <div class="hadith-display" id="hadith-display-end" style="margin-top: 20px;"></div>
+            <div class="modal-buttons">
+                <button class="control-btn" data-action="reset-quiz"><i class="fa-solid fa-arrow-rotate-left"></i> اخْتِبَارٌ جَدِيدٌ</button>
+                <button class="control-btn" data-action="review-mistakes" id="review-mistakes-btn" style="display: none;"><i class="fa-solid fa-person-circle-question"></i> مُرَاجَعَةُ الْأَخْطَاءِ</button>
+                <button class="control-btn" data-action="show-stats"><i class="fa-solid fa-chart-pie"></i> الْإِحْصَائِيَّاتُ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="stats-modal" class="simple-modal">
+        <div class="modal-content modal-content-large">
+            <button class="modal-close-btn">&times;</button>
+            <h2 style="text-align: center;"><i class="fa-solid fa-chart-pie"></i> التَّحْلِيلُ الْكَامِلُ لِلْجَوْلَةِ</h2>
+            <h3><i class="fa-solid fa-clock"></i> مُلَخَّصُ الْجَوْلَةِ</h3>
+            <div class="stats-summary" id="session-summary-stats"></div>
+            <div id="standard-metrics-container">
+                <h3><i class="fa-solid fa-gauge-high"></i> مَقَايِيسُ الْأَدَاءِ</h3>
+                <div class="stats-summary" id="performance-metrics-stats"></div>
+            </div>
+             <h3><i class="fa-solid fa-list-check"></i> السِّجِلُّ التَّفْصِيلِيُّ</h3>
+             <div id="stats-details-list"></div>
+        </div>
+    </div>
+    
+    <div id="settings-modal" class="simple-modal">
+        <div class="modal-content modal-content-large">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-cog"></i> الْإِعْدَادَاتُ الشَّامِلَةُ</h2>
+            
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-universal-access"></i> خِيَارَاتُ الْوُصُولِ</h3>
+                <div class="settings-grid">
+                    <button class="settings-section-btn" data-action="open-modal" data-modal-id="appearance-modal"><i class="fa-solid fa-palette"></i> تَخْصِيصُ الْمَظْهَرِ</button>
+                    <button class="settings-section-btn" data-action="open-modal" data-modal-id="shortcuts-modal"><i class="fa-solid fa-keyboard"></i> تَخْصِيصُ الِاخْتِصَارَاتِ</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-tasks"></i> خِيَارَاتُ الِاخْتِبَارِ</h3>
+                <div class="settings-grid" style="grid-template-columns: 1fr;">
+                    <button class="settings-section-btn" data-action="toggle-show-hide-feature" id="toggle-show-hide-btn">
+                        <i class="fa-solid fa-eye"></i>
+                        <span>إِظْهَارُ الْأَجْوِبَةِ (مُفَعَّلٌ)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-book-bookmark"></i> الْمُرَاجَعَةُ وَالْمَحْفُوظَاتُ</h3>
+                <div class="settings-grid">
+                    <button class="settings-section-btn" data-action="resume-quiz" id="resume-quiz-btn" style="display: none;"><i class="fa-solid fa-play-circle"></i> اسْتِئْنَافُ الِاخْتِبَارِ</button>
+                    <button class="settings-section-btn" data-action="clear-data" style="grid-column: 1 / -1;"><i class="fa-solid fa-trash-can"></i> مَسْحُ الْبَيَانَاتِ</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-circle-info"></i> إِيضَاحٌ وَمَعُونَةٌ</h3>
+                <div class="settings-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <button class="settings-section-btn" data-action="open-modal" data-modal-id="about-modal"><i class="fa-solid fa-circle-info"></i> نُبْذَةٌ</button>
+                    <button class="settings-section-btn" data-action="open-modal" data-modal-id="ai-guide-modal"><i class="fa-solid fa-book-open-reader"></i> الدَّلِيلُ</button>
+                    <button class="settings-section-btn" data-action="open-modal" data-modal-id="changelog-modal"><i class="fa-solid fa-box-archive"></i> سِجِلُّ التَّحْدِيثَاتِ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="appearance-modal" class="simple-modal">
+        <div class="modal-content modal-content-large">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-palette"></i> تَخْصِيصُ الْمَظْهَرِ</h2>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> الْمَظَاهِرُ الْجَاهِزَةُ</h3>
+                <div class="settings-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+                    <button class="settings-section-btn" data-action="apply-preset" data-preset="ink-bloom">الْحِبْرُ</button>
+                    <button class="settings-section-btn" data-action="apply-preset" data-preset="neumorphism">الْبَارِزُ</button>
+                    <button class="settings-section-btn" data-action="apply-preset" data-preset="material">الْمَادِّيُّ</button>
+                    <button class="settings-section-btn" data-action="apply-preset" data-preset="brutalism">الْوَحْشِيُّ</button>
+                    <button class="settings-section-btn" data-action="apply-preset" data-preset="sandstorm">الْعَاصِفَةُ الرَّمْلِيَّةُ</button>
+                </div>
+            </div>
+
+            <div class="settings-section" id="theme-generator">
+                <h3><i class="fa-solid fa-sliders"></i> مُوَلِّدُ الْمَظْهَرِ (تَخْصِيصٌ)</h3>
+                <div class="theme-generator">
+                    <div class="generator-group">
+                        <label for="palette-select">١. اللَّوْحَةُ اللَّوْنِيَّةُ</label>
+                        <select id="palette-select">
+                             <option value="light">الْفَاتِحُ</option>
+                             <option value="dark">الدَّاكِنُ</option>
+                             <option value="ocean">الْمُحِيطُ</option>
+                             <option value="coffee">الْقَهْوَةُ</option>
+                             <option value="particle-grid">لَوْحَةُ الْجُسَيْمَاتِ</option>
+                             <option value="water-ripple">لَوْحَةُ تَمَوُّجِ الْمَاءِ</option>
+                             <option value="ink-bloom">لَوْحَةُ الْحِبْرِ</option>
+                             <option value="hacker">لَوْحَةُ الْقَرَاصِنَةِ</option>
+                             <option value="blueprint">لَوْحَةٌ هَنْدَسِيَّةٌ</option>
+                             <option value="comic">لَوْحَةٌ مُصَوَّرَةٌ</option>
+                             <option value="notebook">لَوْحَةُ الدَّفْتَرِ</option>
+                             <option value="wildwest">لَوْحَةُ الْغَرْبِ</option>
+                             <option value="ocean-waves">لَوْحَةُ الْأَمْوَاجِ</option>
+                             <option value="sandstorm">لَوْحَةُ الْعَاصِفَةِ</option>
+                             <option value="live-steam">لَوْحَةُ الْبُخَارِ</option>
+                             <option value="blazing-sun">لَوْحَةُ الشَّمْسِ</option>
+                             <option value="digital-storm">لَوْحَةُ الْعُصُوفِ</option>
+                             <option value="floating-bubbles">لَوْحَةُ الْفُقَّاعَاتِ</option>
+                             <option value="electric-slabs">لَوْحَةُ الْأَلْوَاحِ</option>
+                        </select>
+                    </div>
+                    <div class="generator-group">
+                        <label for="style-select">٢. نَمَطُ الْعَنَاصِرِ</label>
+                        <select id="style-select">
+                            <option value="neumorphism">بَارِزٌ</option>
+                            <option value="material">مَادِّيٌّ</option>
+                            <option value="brutalism">وَحْشِيٌّ</option>
+                            <option value="hacker">قَرَاصِنَةٌ</option>
+                            <option value="comic">مُصَوَّرٌ</option>
+                        </select>
+                    </div>
+                    <div class="generator-group">
+                        <label for="font-select">٣. الْخَطُّ</label>
+                        <select id="font-select">
+                            <option value="uthman">الْخَطُّ التَّقْلِيدِيُّ</option>
+                            <option value="ruqaa">خَطُّ الرُّقْعَةِ</option>
+                            <option value="amiri">خَطُّ الْمُصْحَفِ</option>
+                            <option value="ibm-plex">خَطُّ الطِّبَاعَةِ</option>
+                            <option value="tajawal">الْخَطُّ الْحَدِيثُ</option>
+                            <option value="rye">خَطُّ الْعَاصِفَةِ</option>
+                            <option value="orbitron">خَطٌّ فَلَكِيٌّ</option>
+                            <option value="share-tech-mono">خَطٌّ تِقْنِيٌّ</option>
+                            <option value="vt323">خَطٌّ قَدِيمٌ</option>
+                        </select>
+                    </div>
+                    <div class="generator-group">
+                        <label for="density-select">٤. الْكَثَافَةُ</label>
+                        <select id="density-select">
+                            <option value="comfortable">مُرِيحٌ</option>
+                            <option value="compact">مَضْغُوطٌ</option>
+                        </select>
+                    </div>
+                    <div class="generator-group">
+                        <label for="background-select">٥. الْخَلْفِيَّةُ</label>
+                        <select id="background-select">
+                            <option value="solid">لَوْنٌ ثَابِتٌ</option>
+                            <option value="halftone">نِقَاطٌ</option>
+                            <option value="wildwest">خَشَبٌ</option>
+                            <option value="particle-grid">تَفَاعُلِيَّةٌ (جُسَيْمَاتٌ)</option>
+                            <option value="water-ripple">تَفَاعُلِيَّةٌ (تَمَوُّجٌ)</option>
+                            <option value="ink-bloom">مُتَحَرِّكَةٌ (حِبْرٌ)</option>
+                            <option value="ocean-waves">مُتَحَرِّكَةٌ (أَمْوَاجٌ)</option>
+                            <option value="sandstorm">مُتَحَرِّكَةٌ (عَاصِفَةٌ)</option>
+                            <option value="live-steam">مُتَحَرِّكَةٌ (بُخَارٌ)</option>
+                            <option value="blazing-sun">مُتَحَرِّكَةٌ (شَمْسٌ)</option>
+                            <option value="digital-storm">مُتَحَرِّكَةٌ (رَقْمِيَّةٌ)</option>
+                            <option value="floating-bubbles">مُتَحَرِّكَةٌ (فُقَّاعَاتٌ)</option>
+                            <option value="electric-slabs">مُتَحَرِّكَةٌ (كَهْرَبَاءٌ)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-tint"></i> ٦. اللَّوْنُ الْمُمَيَّزُ</h3>
+                <div class="color-swatches">
+                    <div class="color-swatch" data-color="#00a99d" style="background-color: #00a99d;"></div>
+                    <div class="color-swatch" data-color="#3498db" style="background-color: #3498db;"></div>
+                    <div class="color-swatch" data-color="#9b59b6" style="background-color: #9b59b6;"></div>
+                    <div class="color-swatch" data-color="#e67e22" style="background-color: #e67e22;"></div>
+                    <div class="color-swatch" data-color="#e74c3c" style="background-color: #e74c3c;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <div id="shortcuts-modal" class="simple-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-keyboard"></i> تَخْصِيصُ الِاخْتِصَارَاتِ</h2>
+            <div id="shortcuts-list"></div>
+            <div class="modal-buttons" style="grid-template-columns: 1fr;">
+                <button class="control-btn" data-action="reset-shortcuts"><i class="fa-solid fa-arrow-rotate-left"></i> اسْتِعَادَةُ الِافْتِرَاضِيَّاتِ</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="about-modal" class="simple-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-circle-info"></i> نُبْذَةٌ عَنِ التَّطْبِيقِ</h2>
+            <p>صُمِّمَ هَذَا التَّطْبِيقُ لِيَكُونَ وَسِيلَةً تَفَاعُلِيَّةً لِتَعَل'ُمِ وَمُرَاجَعَةِ عِلْمِ مُصْطَلَحِ الْحَدِيثِ.</p>
+            <p>يَعْمَلُ التَّطْبِيقُ بِالْكَامِلِ دَاخِلَ الْمُتَصَفِّحِ، وَلَا يَتَطَلَّبُ اتِّصَالًا بِالْإِنْتَرْنِتِ بَعْدَ التَّحْمِيلِ الْأَوَّلِيِّ، مَعَ حِفْظِ تَقَدُّمِكَ وَتَفْضِيلَاتِكَ مَحَلِّيًّا.</p>
+            <hr style="margin: 15px 0; border-color: var(--border-color);"/>
+            <p style="text-align: center; font-size: 1rem;">الْإِصْدَارُ: 3.8</p>
+        </div>
+    </div>
+
+    <div id="changelog-modal" class="simple-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-box-archive"></i> سِجِلُّ التَّحْدِيثَاتِ</h2>
+            <div id="changelog-content"></div>
+        </div>
+    </div>
+
+    <div id="ai-guide-modal" class="simple-modal">
+        <div class="modal-content modal-content-large">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-book-open-reader"></i> دَلِيلُ الْمُسْتَخْدِمِ لِلِاخْتِبَارِ</h2>
+            <p>صُمِّمَ هَذَا التَّطْبِيقُ لِمُسَاعَدَتِكَ فِي اخْتِبَارِ مَعْرِفَتِكَ بِالْحَدِيثِ الْمُسْنَدِ. يَعْمَلُ التَّطْبِيقُ بِالْكَامِلِ عَلَى الْمُتَصَفِّحِ، وَلَا يَتَطَلَّبُ اتِّصَالًا بِالْإِنْتَرْنِتِ بَعْدَ التَّحْمِيلِ الْأَوَّلِيِّ.</p>
+            <p><strong>١. مَكْتَبَةُ الأَحَادِيثِ:</strong><br/>
+                تَحْتَوِي الْمَكْتَبَةُ عَلَى <strong>(<span id="hadith-count-guide"></span>)</strong> أَثَرًا مِنَ الْأَحَادِيثِ النَّبَوِيَّةِ الشَّرِيفَةِ حَوْلَ فَضْلِ الْعِلْمِ.</p>
+            <p><strong>٢. بَنْكُ الأَسْئِلَةِ:</strong><br/>
+                يَحْتَوِي هَذَا الِاخْتِبَارُ عَلَى <strong>(<span id="question-count-guide"></span>)</strong> مَسْأَلَةٍ عِلْمِيَّةٍ مِنْ نَوْعِ (صَوَابٌ وَخَطَأٌ) مُسْتَخْرَجَةٍ مِنْ <strong>الدَّرْسِ السَّابِعِ: الْمُسْنَدُ</strong>.</p>
+        </div>
+    </div>
+
+    <div id="export-modal" class="simple-modal">
+        <div class="modal-content modal-content-large">
+            <button class="modal-close-btn">&times;</button>
+            <h2><i class="fa-solid fa-file-export"></i> الْإِخْرَاجُ الشَّامِلُ</h2>
+            <p>تَصْدِيرُ الْمَادَّةِ الْعِلْمِيَّةِ كَامِلَةً.</p>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-database"></i> بَنْكُ الْأَسْئِلَةِ (الدَّرْسُ السَّابِعُ)</h3>
+                <div class="settings-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <button class="settings-section-btn" data-action="export-all-questions" data-type="pdf"><i class="fa-solid fa-file-pdf"></i> أَسْئِلَةٌ (PDF)</button>
+                    <button class="settings-section-btn" data-action="export-all-questions" data-type="txt"><i class="fa-solid fa-file-lines"></i> أَسْئِلَةٌ (TXT)</button>
+                    <button class="settings-section-btn" data-action="export-all-questions" data-type="print"><i class="fa-solid fa-print"></i> اسْتِنْسَاخُ الْأَسْئِلَةِ</button>
+                    <button class="settings-section-btn" data-action="export-all-answers" data-type="pdf"><i class="fa-solid fa-file-invoice"></i> أَجْوِبَةٌ (PDF)</button>
+                    <button class="settings-section-btn" data-action="export-all-answers" data-type="txt"><i class="fa-solid fa-file-alt"></i> أَجْوِبَةٌ (TXT)</button>
+                    <button class="settings-section-btn" data-action="export-all-answers" data-type="print"><i class="fa-solid fa-paste"></i> اسْتِنْسَاخُ الْأَجْوِبَةِ</button>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3><i class="fa-solid fa-book-quran"></i> مَكْتَبَةُ الْأَحَادِيثِ</h3>
+                <div class="settings-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <button class="settings-section-btn" data-action="export-all-hadith" data-type="pdf"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                    <button class="settings-section-btn" data-action="export-all-hadith" data-type="txt"><i class="fa-solid fa-file-lines"></i> TXT</button>
+                    <button class="settings-section-btn" data-action="export-all-hadith" data-type="print"><i class="fa-solid fa-print"></i> اسْتِنْسَاخٌ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="explanation-modal" class="simple-modal"><div class="modal-content"><button class="modal-close-btn">&times;</button><h2 id="explanation-title"><i class="fa-solid fa-book-open"></i> شَرْحٌ مُفَصَّلٌ</h2><p id="explanation-text"></p></div></div>
+    <div id="favorites-modal" class="simple-modal"><div class="modal-content"><button class="modal-close-btn">&times;</button><h2><i class="fa-solid fa-star"></i> الْأَسْئِلَةُ الْمُفَضَّلَةُ</h2><ul id="favorites-list" style="list-style-type: none; padding-right: 20px;"></ul></div></div>
+    <div id="pause-overlay"> <div id="pause-content"> <i class="fa-solid fa-pause"></i> <h1>إِيقَافٌ مُؤَقَّتٌ</h1> <p>انْقُرْ لِلِاسْتِئْنَافِ</p> </div> </div>
+    <div id="notification-container"></div>
+    <div id="print-content"></div>
+    
+<script>
+// ==================================================================================
+// ==  القسم الأول: بيانات الاختبار (تم إثراء البيانات)  ==
+// ==================================================================================
+const fullQuizData = [
+    { statement: 'يُطْلَقُ مُصْطَلَحُ "الْمُسْنَدِ" وَيُرَادُ بِهِ مَعْنًى وَاحِدٌ فَقَطْ فِي عُلُومِ الْحَدِيثِ.', answer: 'incorrect', correction: 'يُطْلَقُ وَيُرَادُ بِهِ ثَلَاثَةُ مَعَانٍ (كِتَابٌ، إِسْنَادٌ، حَدِيثٌ مَرْفُوعٌ مُتَّصِلٌ).', explanation: 'لِلْمُصْطَلَحِ ثَلَاثَةُ مَعَانٍ مَشْهُورَةٍ: الْكِتَابُ الَّذِي يَجْمَعُ الْمَسَانِيدَ، وَالْإِسْنَادُ نَفْسُهُ، وَالْحَدِيثُ الْمَرْفُوعُ الْمُتَّصِلُ.', hint: 'تَذَكَّرْ "مُسْنَدَ الْإِمَامِ أَحْمَدَ" وَعَلَاقَتَهُ بِالْمُصْطَلَحِ.' },
+    { statement: 'حَاصِلُ كَلَامِ النَّاظِمِ أَنَّ الْمُسْنَدَ يَجْمَعُ بَيْنَ أَمْرَيْنِ، وَهُمَا: الرَّفْعُ وَالِاتِّصَالُ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَهُوَ قَوْلُ الْحَاكِمِ.', explanation: 'جَمَعَ الْحَدِيثُ الْمُسْنَدُ بَيْنَ شَرْطَيْنِ أَسَاسِيَّيْنِ، هُمَا: الرَّفْعُ (أَيْ: نِسْبَتُهُ لِلنَّبِيِّ ﷺ) وَاتِّصَالُ السَّنَدِ.', hint: 'مَا هُمَا الشَّرْطَانِ اللَّذَانِ يُمَيِّزَانِ الْمُسْنَدَ عِنْدَ الْجُمْهُورِ؟' }
+];
+
+const hadithLibrary = [
+    { text: '«مَنْ سَلَكَ طَرِيقًا يَطْلُبُ فِيهِ عِلْمًا، سَلَكَ اللَّهُ بِهِ طَرِيقًا مِنْ طُرُقِ الْجَنَّةِ»', source: 'سُنَنُ أَبِي دَاوُدَ، رَقْمُ ٣٦٤١ (صَحَّحَهُ الْأَلْبَانِيُّ)' },
+    { text: '«مَنْ يُرِدِ اللَّهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ»', source: 'صَحِيحُ الْبُخَارِيِّ، رَقْمُ ٧١' },
+    { text: '«إِنَّ الْعُلَمَاءَ وَرَثَةُ الْأَنْبِيَاءِ...', source: 'سُنَنُ أَبِي دَاوُدَ، رَقْمُ ٣٦٤١ (صَحَّحَهُ الْأَلْبَانِيُّ)' },
+    { text: '«إِذَا مَاتَ الْإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ إِلَّا مِنْ ثَلَاثَةٍ: ...أَوْ عِلْمٍ يُنْتَفَعُ بِهِ...', source: 'صَحِيحُ مُسْلِمٍ، رَقْمُ ١٦٣١' }
+];
+
+// ==================================================================================
+// ==  سجل التغييرات  ==
+// ==================================================================================
+//
+const changelogData = [
+    { version: "3.8 (النُّسْخَةُ الْحَالِيَّةُ)", changes: ["إِضَافَةُ مَظْهَرٍ حَرَكِيٍّ جَدِيدٍ (الْعَاصِفَةُ الرَّمْلِيَّةُ).", "تَرْقِيَةُ مُحَرِّكِ الرُّسُومِ الْمُتَحَرِّكَةِ لِدَعْمِ الْخَلْفِيَّاتِ التَّفَاعُلِيَّةِ الْجَدِيدَةِ."] },
+    { version: "3.7", changes: ["إِضَافَةُ ٩ مَظَاهِرَ جَاهِزَةٍ جَدِيدَةٍ (الْمَنْظُورُ، الْحِبْرُ، الْمَادِّيُّ، إلخ).", "تَرْقِيَةُ مُوَلِّدِ الْمَظْهَرِ لِيُطَابِقَ الْمِيزَاتِ الْمُتَقَدِّمَةَ فِي التَّطْبِيقَاتِ الْأُخْرَى."] },
+    { version: "3.6", changes: ["إِضَافَةُ خِيَارٍ جَدِيدٍ لِـ «عُمْقِ التَّصْمِيمِ» يَتِيحُ التَّبْدِيلَ بَيْنَ الْمَظْهَرِ الْبَارِزِ وَالْمُسَطَّحِ."] },
+    { version: "3.5", changes: ["تَرْقِيَةُ مُوَلِّدِ الْمَظْهَرِ لِيَشْمَلَ خِيَارَاتِ الْكَثَافَةِ وَالْخَلْفِيَّةِ.", "إِضَافَةُ خَلْفِيَّاتٍ تَفَاعُلِيَّةٍ جَدِيدَةٍ (شَبَكَةُ الْجُسَيْمَاتِ، تَمَوُّجَاتُ الْمَاءِ).", "تَوْحِيدُ مَحَرِّكِ الْمَظَاهِرِ لِيُطَابِقَ الْإِصْدَارَاتِ الْأَكْثَرَ تَقَدُّمًا."] },
+    { version: "3.4", changes: ["إِضَافَةُ زِرِّ «الْإِخْرَاجُ الشَّامِلُ» إِلَى الْوَاجِهَةِ الرَّئِيسِيَّةِ.", "تَوْفِيرُ خِيَارَاتٍ لِتَصْدِيرِ بَنْكِ الْأَسْئِلَةِ وَمَكْتَبَةِ الْأَحَادِيثِ.", "إِضَافَةُ ٤ خُطُوطٍ جَدِيدَةٍ (Scheherazade, Amiri, IBM Plex, Tajawal) مَعَ إِمْكَانِيَّةِ اخْتِيَارِهَا مِنَ الْإِعْدَادَاتِ.", "تَحْسِينُ تَصْمِيمِ وَاجِهَةِ الْبَدْءِ."] },
+    { version: "3.3", changes: ["تَمَّتْ تَرْقِيَةُ الْوَاجِهَةِ لِتَتَضَمَّنَ خِيَارَاتٍ مُوَسَّعَةً وَأَدَوَاتٍ إِضَافِيَّةً عَلَى بِطَاقَةِ السُّؤَالِ.", "إِضَافَةُ سِجِلِّ التَّحْدِيثَاتِ وَدَلِيلِ الْمُسْتَخْدِمِ.", "إِعَادَةُ مِيزَةِ تَخْصِيصِ اللَّوْنِ الْمُمَيَّزِ."] }
+];
+
+// ==================================================================================
+// == القسم الثالث: المنطق البرمجي للاختبار (تمت ترقيته بالكامل) ==
+// ==================================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // ======================================================
+    // ==         محرك المظاهر - المتغيرات والعناصر         ==
+    // ======================================================
+    const backgroundEffectsCanvas = document.getElementById('background-effects-canvas');
+    const themeSelectors = document.querySelectorAll('#theme-generator select');
+    const themePresets = {
+        'perspective': { palette: 'dark', style: 'perspective', font: 'ibm-plex', density: 'comfortable', background: 'perspective' },
+        'ink-bloom': { palette: 'ink-bloom', style: 'material', font: 'amiri', density: 'comfortable', background: 'ink-bloom' },
+        'particle-grid': { palette: 'particle-grid', style: 'glass', font: 'ibm-plex', density: 'comfortable', background: 'particle-grid'},
+        'water-ripple': { palette: 'water-ripple', style: 'glass', font: 'tajawal', density: 'comfortable', background: 'water-ripple'},
+        'neumorphism': { palette: 'light', style: 'neumorphism', font: 'amiri', density: 'comfortable', background: 'solid' },
+        'glassmorphism': { palette: 'ocean', style: 'glass', font: 'tajawal', density: 'comfortable', background: 'gradient' },
+        'material': { palette: 'light', style: 'material', font: 'tajawal', density: 'comfortable', background: 'solid' },
+        'brutalism': { palette: 'dark', style: 'brutalism', font: 'ibm-plex', density: 'compact', background: 'solid' },
+        'hacker': { palette: 'hacker', style: 'hacker', font: 'hacker', density: 'compact', background: 'solid' },
+        'blueprint': { palette: 'blueprint', style: 'brutalism', font: 'blueprint', density: 'comfortable', background: 'grid' },
+        'comic': { palette: 'comic', style: 'comic', font: 'comic', density: 'comfortable', background: 'halftone' },
+        'notebook': { palette: 'notebook', style: 'notebook', font: 'notebook', density: 'comfortable', background: 'notebook' },
+        'wildwest': { palette: 'wildwest', style: 'wildwest', font: 'wildwest', density: 'comfortable', background: 'wildwest' },
+        'sandstorm': { palette: 'sandstorm', style: 'material', font: 'rye', density: 'comfortable', background: 'sandstorm' }
+    };
+    let activeMenu = null;
+    let activeAnimationId = null;
+    let perspectiveHandler = null;
+    let waterRippleHandler = null;
+
+    // DOM Elements
+    const quizSetup = document.getElementById('quiz-setup'), quizWrapper = document.getElementById('quiz-wrapper');
+    const quizContainer = document.getElementById('quiz-container');
+    const scoreContainer = document.getElementById('score-container');
+    const progressBarTop = document.getElementById('progress-bar-top');
+    const finalScoreModal = document.getElementById('final-score-modal');
+    const hadithStart = document.getElementById('hadith-display-start');
+    const notificationContainer = document.getElementById('notification-container');
+    const pauseOverlay = document.getElementById('pause-overlay');
+    const pauseResumeBtn = document.getElementById('pause-resume-btn');
+    const globalTimerContainer = document.getElementById('global-timer'), globalTimerDisplay = document.getElementById('global-timer-display');
+    const livesDisplay = document.getElementById('lives-display'), livesCount = document.getElementById('lives-count');
+    const explanationModal = document.getElementById('explanation-modal'), explanationText = document.getElementById('explanation-text'), explanationTitle = document.getElementById('explanation-title');
+    const quizSetupModal = document.getElementById('quiz-setup-modal');
+    const shortcutsModal = document.getElementById('shortcuts-modal');
+    const shortcutsList = document.getElementById('shortcuts-list');
+    const resumeBtn = document.getElementById('resume-quiz-btn');
+    const statsModal = document.getElementById('stats-modal');
+    const finalScoreTitle = document.getElementById('final-score-title');
+    const reviewMistakesBtn = document.getElementById('review-mistakes-btn');
+    const tfSlider = document.getElementById('tf-question-count-slider'), tfSliderValue = document.getElementById('tf-question-count-value');
+    const desktopClock = document.getElementById('desktop-clock');
+    const desktopClockDisplay = document.getElementById('desktop-clock-display');
+    const printContent = document.getElementById('print-content');
+    
+    const state = {
+        score: 0, answeredCount: 0, totalQuestions: 0, currentQuizData: [], marathonIndex: 0,
+        quizSessionLog: [], sessionStartTime: null, sessionEndTime: null, reviewAttemptNumber: 1,
+        quizType: 'test', quizMode: 'normal', timerMode: 'none', 
+        marathonHasTimer: true, marathonHasLives: false, livesLeft: 3, 
+        currentTimerId: null, timerCountdownEndDate: 0, isPaused: false, timeLeftOnPause: 0,
+        currentTimerOnEndCallback: null, lastAnswerTime: null,
+        player1Name: 'اللَّاعِبُ ١', player2Name: 'اللَّاعِبُ ٢', player1Score: 0, player2Score: 0, currentPlayer: 1
+    };
+
+    const CONSTS = { QUIZ_TYPES: { LEARNING: 'learning', TEST: 'test', COMPETITION: 'competition' }, QUIZ_MODES: { FLASHCARD: 'flashcard', GUIDED: 'learning', NORMAL: 'normal', FAVORITES: 'favorites' }, TIMER_MODES: { NONE: 'none', SUDDEN_DEATH: 'suddenDeath', MARATHON: 'marathon' } };
+    const MARATHON_TIME_PER_QUESTION = 10;
+    
+    let appSettings = { fontFamily: '', fontSize: null, showHideAnswersEnabled: true, accentColor: '#00a99d' };
+    let exportLibrariesLoaded = false;
+    const defaultShortcuts = { correct: 'ص', incorrect: 'خ', readQuestion: 'ق', readCorrection: 'ش', showHint: 'ت', toggleFavorite: 'م', closeModals: 'Escape' };
+    const shortcutLabels = { correct: 'صَوَابٌ', incorrect: 'خَطَأٌ', readQuestion: 'قِرَاءَةُ السُّؤَالِ', readCorrection: 'قِرَاءَةُ الشَّرْحِ', showHint: 'تَلْمِيحٌ', toggleFavorite: 'تَعْلِيمُ مَسْأَلَةٍ', closeModals: 'إِغْلَاقُ النَّوَافِذِ' };
+    let shortcuts = { ...defaultShortcuts };
+
+    function showNotification(message, type = 'info', duration = 3000) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        let iconClass = 'fa-solid fa-circle-info';
+        if (type === 'success') iconClass = 'fa-solid fa-check-circle';
+        if (type === 'error') iconClass = 'fa-solid fa-exclamation-circle';
+        notification.innerHTML = `<i class="${iconClass}"></i><span>${message}</span>`;
+        notificationContainer.appendChild(notification);
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            notification.addEventListener('animationend', () => notification.remove());
+        }, duration);
+    }
+    
+    const getFavorites = () => JSON.parse(localStorage.getItem('favoriteQuestions') || '[]');
+    const getFavoriteData = () => {
+        const favStatements = getFavorites();
+        return fullQuizData.filter(q => favStatements.includes(q.statement));
+    };
+    const isFavorite = (statement) => getFavorites().includes(statement);
+    const toggleFavorite = (statement) => {
+        let favorites = getFavorites();
+        if (favorites.includes(statement)) {
+            favorites = favorites.filter(fav => fav !== statement);
+            showNotification('أُزِيلَتْ مِنَ الْمُعَلَّمَةِ.', 'info');
+        } else {
+            favorites.push(statement);
+            showNotification('أُضِيفَتْ إِلَى الْمُعَلَّمَةِ.', 'success');
+        }
+        localStorage.setItem('favoriteQuestions', JSON.stringify(favorites));
+    };
+
+    function saveQuizState() {
+        if (state.quizType !== CONSTS.QUIZ_TYPES.TEST || (state.quizMode !== CONSTS.QUIZ_MODES.NORMAL && state.quizMode !== CONSTS.QUIZ_MODES.FAVORITES)) return;
+        const stateToSave = { ...state, currentTimerId: null, currentTimerOnEndCallback: null };
+        localStorage.setItem('savedQuizState', JSON.stringify(stateToSave));
+        localStorage.setItem('isQuizInProgress', 'true');
+        updateResumeButtonVisibility();
+    }
+    function loadQuizState() {
+        const savedState = localStorage.getItem('savedQuizState');
+        if (savedState) {
+            const loadedData = JSON.parse(savedState);
+            Object.assign(state, loadedData);
+            state.sessionStartTime = new Date(loadedData.sessionStartTime);
+            state.lastAnswerTime = new Date();
+            return true;
+        }
+        return false;
+    }
+    function clearQuizState() {
+        localStorage.removeItem('savedQuizState');
+        localStorage.removeItem('isQuizInProgress');
+        updateResumeButtonVisibility();
+    }
+    function updateResumeButtonVisibility() {
+        resumeBtn.style.display = localStorage.getItem('isQuizInProgress') === 'true' ? 'flex' : 'none';
+    }
+
+    function startQuiz(isReview = false, questionsForReview = []) {
+        clearQuizState();
+        clearInterval(state.currentTimerId);
+        speechSynthesis.cancel();
+        state.isPaused = false;
+        pauseOverlay.style.display = 'none';
+
+        if (!isReview) {
+            state.reviewAttemptNumber = 1;
+            state.sessionStartTime = new Date();
+        } else {
+            state.reviewAttemptNumber++;
+        }
+        state.score = 0;
+        state.answeredCount = 0;
+        state.lastAnswerTime = new Date();
+        finalScoreModal.classList.remove('visible');
+        quizSetup.style.display = 'none';
+        quizWrapper.style.display = 'block';
+        desktopClock.style.display = 'none';
+        document.getElementById('main-container').classList.add('quiz-active');
+
+        const isTimedMode = state.quizType === CONSTS.QUIZ_TYPES.TEST && (state.timerMode === CONSTS.TIMER_MODES.MARATHON || state.timerMode === CONSTS.TIMER_MODES.SUDDEN_DEATH);
+        pauseResumeBtn.style.display = isTimedMode ? 'inline-flex' : 'none';
+        
+        if (state.quizType === CONSTS.QUIZ_TYPES.COMPETITION) {
+            state.player1Name = document.getElementById('player1-name').value.trim() || 'اللَّاعِبُ ١';
+            state.player2Name = document.getElementById('player2-name').value.trim() || 'اللَّاعِبُ ٢';
+            state.player1Score = 0; state.player2Score = 0; state.currentPlayer = 1;
+            const questionsPerPlayer = parseInt(document.getElementById('competition-question-count-slider').value, 10);
+            state.totalQuestions = questionsPerPlayer * 2;
+            state.currentQuizData = [...fullQuizData].sort(() => 0.5 - Math.random()).slice(0, state.totalQuestions);
+            state.quizSessionLog = state.currentQuizData.map(q => ({ ...q, attempts: [] }));
+            quizContainer.innerHTML = '';
+            showNextCompetitionQuestion();
+        } else if (state.quizMode === CONSTS.QUIZ_MODES.GUIDED || (state.quizMode === CONSTS.QUIZ_MODES.NORMAL && state.timerMode === CONSTS.TIMER_MODES.MARATHON)) {
+            state.currentQuizData = [...fullQuizData].sort(() => 0.5 - Math.random());
+            state.marathonIndex = 0; state.quizSessionLog = [];
+            if (state.timerMode === CONSTS.TIMER_MODES.MARATHON) {
+                if (state.marathonHasTimer) globalTimerContainer.style.display = 'flex';
+                if (state.marathonHasLives) { state.livesLeft = 3; livesCount.textContent = state.livesLeft; livesDisplay.style.display = 'flex'; }
+            }
+            showNextMarathonQuestion();
+        } else {
+            let questionsToLoad = [];
+            if(isReview) {
+                questionsToLoad = questionsForReview;
+            } else {
+                if(state.quizMode === CONSTS.QUIZ_MODES.FAVORITES) {
+                    questionsToLoad = getFavoriteData();
+                    if(questionsToLoad.length === 0) {
+                        showNotification('لَا تُوجَدُ أَسْئِلَةٌ مُعَلَّمَةٌ لِبَدْءِ هَذَا الِاخْتِبَارِ.', 'error');
+                        resetQuiz(); return;
+                    }
+                } else {
+                    questionsToLoad = [...fullQuizData].sort(() => 0.5 - Math.random());
+                    if(state.quizMode === CONSTS.QUIZ_MODES.NORMAL && state.timerMode === CONSTS.TIMER_MODES.NONE) {
+                        questionsToLoad = questionsToLoad.slice(0, parseInt(tfSlider.value, 10));
+                    }
+                }
+                state.quizSessionLog = questionsToLoad.map(q => ({ ...q, attempts: [] }));
+            }
+            state.currentQuizData = questionsToLoad;
+            state.totalQuestions = state.currentQuizData.length;
+            buildQuiz(state.currentQuizData);
+            if (state.timerMode === CONSTS.TIMER_MODES.SUDDEN_DEATH) {
+                globalTimerContainer.style.display = 'flex';
+                startTimerForQuestion(0);
+            }
+        }
+        updateStats();
+        updateControlButtonsVisibility();
+    }
+
+    function showNextMarathonQuestion() {
+        if(state.marathonIndex >= state.currentQuizData.length) { state.marathonIndex = 0; }
+        const item = state.currentQuizData[state.marathonIndex];
+        quizContainer.innerHTML = '';
+        quizContainer.appendChild(buildSingleCard(item, state.answeredCount + 1));
+        state.marathonIndex++;
+        if(state.quizMode === CONSTS.QUIZ_MODES.NORMAL && state.timerMode === CONSTS.TIMER_MODES.MARATHON && state.marathonHasTimer) startMarathonQuestionTimer();
+    }
+    
+    function showNextCompetitionQuestion() {
+        const questionIndex = state.answeredCount;
+        if(questionIndex >= state.totalQuestions) { showFinalScore(); return; }
+        const item = state.currentQuizData[questionIndex];
+        quizContainer.innerHTML = '';
+        const turnIndicator = document.createElement('h2');
+        turnIndicator.textContent = `دَوْرُ: ${state.currentPlayer === 1 ? state.player1Name : state.player2Name}`;
+        turnIndicator.style.cssText = 'text-align: center; color: var(--accent-color); margin-bottom: 15px;';
+        quizContainer.appendChild(turnIndicator);
+        quizContainer.appendChild(buildSingleCard(item, Math.floor(questionIndex / 2) + 1));
+    }
+    
+    function buildQuiz(questions) {
+        quizContainer.innerHTML = '';
+        questions.forEach((item, index) => quizContainer.appendChild(buildSingleCard(item, index + 1)));
+        updateStats();
+    }
+    
+    function buildSingleCard(item, number) {
+        const card = document.createElement('div');
+        card.className = 'question-card'; card.dataset.correctAnswer = item.answer; card.dataset.statement = item.statement;
+        const isFav = isFavorite(item.statement);
+        const showHint = item.hint && state.quizMode !== CONSTS.QUIZ_MODES.FLASHCARD;
+        const actionButtonsHtml = (state.quizMode === CONSTS.QUIZ_MODES.FLASHCARD)
+            ? `<button class="action-btn" data-action="reveal-answer">إِظْهَارُ الْجَوَابِ</button>`
+            : `<button class="action-btn correct" data-action="submit-answer" data-choice="correct">صَحٌّ</button><button class="action-btn incorrect" data-action="submit-answer" data-choice="incorrect">خَطَأٌ</button>`;
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="question-number">${number}</div>
+                <p class="question-text">${item.statement}</p>
+                <button class="header-btn" data-action="read-aloud" data-type="question" title="قِرَاءَةُ السُّؤَالِ"><i class="fa-solid fa-volume-high"></i></button>
+                <button class="header-btn" data-action="read-aloud" data-type="correction" title="قِرَاءَةُ الشَّرْحِ" style="display: none;"><i class="fa-solid fa-comment-dots"></i></button>
+                ${showHint ? `<button class="header-btn" data-action="show-hint" title="تَلْمِيحٌ"><i class="fa-solid fa-lightbulb"></i></button>` : ''}
+                <button class="header-btn" data-action="show-explanation" title="إِيضَاحُ الْمَسْأَلَةِ" style="display: none;"><i class="fa-solid fa-book-open"></i></button>
+                <button class="header-btn" data-action="copy-text" data-type="question" title="نَسْخُ السُّؤَالِ"><i class="fa-solid fa-copy"></i></button>
+                <button class="header-btn" data-action="copy-text" data-type="answer" title="نَسْخُ السُّؤَالِ مَعَ الْجَوَابِ" style="display: none;"><i class="fa-solid fa-paste"></i></button>
+                <button class="header-btn" data-action="toggle-favorite" title="تَعْلِيمُ الْمَسْأَلَةِ"><i class="fa-${isFav ? 'solid' : 'regular'} fa-star ${isFav ? 'favorited' : ''}"></i></button>
+            </div>
+            <div class="card-actions">${actionButtonsHtml}</div>
+            <div class="result-container"></div>`;
+        return card;
+    }
+    
+    function timerTick(duration, onEnd) {
+        state.timerCountdownEndDate = Date.now() + duration;
+        clearInterval(state.currentTimerId);
+        const updateDisplay = () => {
+            const remaining = state.timerCountdownEndDate - Date.now();
+            if (remaining <= 0) { clearInterval(state.currentTimerId); onEnd(); return; }
+            globalTimerDisplay.textContent = Math.ceil(remaining / 1000);
+            globalTimerContainer.classList.toggle('low-time', remaining <= 5000);
+        };
+        updateDisplay();
+        state.currentTimerId = setInterval(updateDisplay, 500);
+    }
+    function startTimerForQuestion(index) {
+        state.currentTimerOnEndCallback = () => {
+             const card = quizContainer.children[index];
+             if (card && !card.classList.contains('revealed')) { processAnswer(card, null); }
+        };
+        timerTick(30 * 1000, state.currentTimerOnEndCallback);
+    }
+    function startMarathonQuestionTimer() {
+        state.currentTimerOnEndCallback = () => {
+            const card = quizContainer.querySelector('.question-card:not(.revealed)');
+            if (card) { processAnswer(card, null, true); }
+        };
+        timerTick(MARATHON_TIME_PER_QUESTION * 1000, state.currentTimerOnEndCallback);
+    }
+    function toggleTimerPause() {
+        const isTimed = state.quizType === CONSTS.QUIZ_TYPES.TEST && (state.timerMode === CONSTS.TIMER_MODES.MARATHON || state.timerMode === CONSTS.TIMER_MODES.SUDDEN_DEATH);
+        if (!isTimed || quizContainer.innerHTML.trim() === '') return;
+        state.isPaused = !state.isPaused;
+        const icon = pauseResumeBtn.querySelector('i');
+        if (state.isPaused) {
+            clearInterval(state.currentTimerId);
+            state.timeLeftOnPause = state.timerCountdownEndDate - Date.now();
+            pauseOverlay.style.display = 'flex';
+            icon.className = 'fa-solid fa-play';
+        } else {
+            pauseOverlay.style.display = 'none';
+            if (state.timeLeftOnPause > 0 && state.currentTimerOnEndCallback) {
+                timerTick(state.timeLeftOnPause, state.currentTimerOnEndCallback);
+            }
+            icon.className = 'fa-solid fa-pause';
+        }
+    }
+
+    function processAnswer(card, choice, fromTimeout = false) {
+        if(state.isPaused) return;
+        clearInterval(state.currentTimerId);
+        const statement = card.dataset.statement;
+        const answerTime = new Date();
+        const timeForQuestion = (answerTime - state.lastAnswerTime) / 1000;
+        state.lastAnswerTime = answerTime;
+        state.sessionEndTime = answerTime;
+        
+        const isCorrect = choice !== null && choice === card.dataset.correctAnswer;
+        const questionData = fullQuizData.find(q => q.statement === statement);
+        
+        const sessionQuestion = state.quizSessionLog.find(q => q.statement === statement);
+        if(sessionQuestion) {
+            sessionQuestion.attempts.push({ choice, isCorrect, timeTaken: timeForQuestion, player: (state.quizType === CONSTS.QUIZ_TYPES.COMPETITION ? state.currentPlayer : null) });
+        }
+        
+        if (state.quizType === CONSTS.QUIZ_TYPES.COMPETITION) {
+            if (isCorrect) (state.currentPlayer === 1) ? state.player1Score++ : state.player2Score++;
+        } else {
+            if (state.quizMode !== CONSTS.QUIZ_MODES.FLASHCARD) {
+                if (isCorrect) state.score++;
+                if ((state.timerMode === CONSTS.TIMER_MODES.SUDDEN_DEATH && !isCorrect) || (state.timerMode === CONSTS.TIMER_MODES.MARATHON && !isCorrect && !state.marathonHasLives)) {
+                    revealAnswer(card, false, questionData);
+                    showFinalScore(); return;
+                }
+                if(state.timerMode === CONSTS.TIMER_MODES.MARATHON && (!isCorrect || fromTimeout)) {
+                    if (state.marathonHasLives) {
+                        state.livesLeft--;
+                        livesCount.textContent = state.livesLeft;
+                        if (state.livesLeft <= 0) {
+                            revealAnswer(card, false, questionData);
+                            showFinalScore(); return;
+                        }
+                    }
+                }
+            }
+        }
+
+        revealAnswer(card, isCorrect, questionData);
+        state.answeredCount++;
+        updateStats();
+
+        const isTestFinished = (state.quizType === CONSTS.QUIZ_TYPES.TEST && state.quizMode !== CONSTS.QUIZ_MODES.GUIDED && state.timerMode !== CONSTS.TIMER_MODES.MARATHON && state.answeredCount === state.totalQuestions);
+        
+        if (isTestFinished) {
+            setTimeout(showFinalScore, 800);
+        } else if (state.quizType === CONSTS.QUIZ_TYPES.COMPETITION) {
+            if(state.answeredCount >= state.totalQuestions) { setTimeout(showFinalScore, 1200); }
+            else { state.currentPlayer = (state.currentPlayer === 1) ? 2 : 1; setTimeout(showNextCompetitionQuestion, 1200); }
+        } else if (state.quizMode === CONSTS.QUIZ_MODES.GUIDED || (state.quizMode === CONSTS.QUIZ_MODES.NORMAL && state.timerMode === CONSTS.TIMER_MODES.MARATHON)) {
+            setTimeout(showNextMarathonQuestion, 1200);
+        } else if (state.timerMode === CONSTS.TIMER_MODES.SUDDEN_DEATH) {
+            startTimerForQuestion(state.answeredCount);
+        }
+
+        if(state.quizType === CONSTS.QUIZ_TYPES.TEST && !isTestFinished) saveQuizState();
+        else clearQuizState();
+    }
+
+
+    function revealAnswer(card, isCorrect, questionData) {
+        card.classList.add('revealed');
+        card.querySelectorAll('.action-btn').forEach(b => b.disabled = true);
+        const resultContainer = card.querySelector('.result-container');
+        resultContainer.innerHTML = `<i class="fa-solid ${isCorrect ? 'fa-circle-check correct' : 'fa-circle-xmark incorrect'} result-icon"></i><p class="correction-text ${isCorrect ? 'correct' : 'incorrect'}">${questionData.correction}</p>`;
+        card.querySelector('[data-action="show-explanation"]').style.display = questionData.explanation ? 'inline-flex' : 'none';
+        card.querySelector('[data-action="read-aloud"][data-type="correction"]').style.display = 'inline-flex';
+        card.querySelector('[data-action="copy-text"][data-type="answer"]').style.display = 'inline-flex';
+    }
+    
+    function updateStats() {
+        if(state.quizType === CONSTS.QUIZ_TYPES.COMPETITION) {
+            scoreContainer.innerHTML = `<span style="font-size:1rem;">${state.player1Name}: ${state.player1Score}</span> &nbsp;|&nbsp; <span style="font-size:1rem;">${state.player2Name}: ${state.player2Score}</span>`;
+            progressBarTop.style.width = `${(state.answeredCount / state.totalQuestions) * 100}%`;
+        } else if (state.quizMode === CONSTS.QUIZ_MODES.GUIDED || state.timerMode === CONSTS.TIMER_MODES.MARATHON) {
+             scoreContainer.innerHTML = `<i class="fa-solid fa-star"></i><span>الصَّوَابُ: ${state.score} / ${state.answeredCount}</span>`;
+        } else {
+            scoreContainer.innerHTML = `<i class="fa-solid fa-star"></i><span id="score-text">النَّتِيجَةُ: ${state.score} / ${state.totalQuestions}</span>`;
+            progressBarTop.style.width = `${(state.answeredCount / state.totalQuestions) * 100}%`;
+        }
+    }
+
+    function showFinalScore() {
+        clearQuizState();
+        clearInterval(state.currentTimerId);
+        speechSynthesis.cancel();
+        state.sessionEndTime = new Date();
+        pauseResumeBtn.style.display = 'none';
+        finalScoreModal.classList.add('visible');
+        const finalScoreText = document.getElementById('final-score-text');
+        const finalMessage = document.getElementById('final-message');
+        
+        if (state.quizType === CONSTS.QUIZ_TYPES.COMPETITION) {
+            let winnerMessage = (state.player1Score > state.player2Score) ? `الْفَائِزُ هُوَ ${state.player1Name}!` : (state.player2Score > state.player1Score) ? `الْفَائِزُ هُوَ ${state.player2Name}!` : "النَّتِيجَةُ هِيَ التَّعَادُلُ!";
+            finalScoreTitle.textContent = "انْتَهَتِ الْمُنَافَسَةُ!";
+            finalScoreText.textContent = `${state.player1Name}: ${state.player1Score} - ${state.player2Name}: ${state.player2Score}`;
+            finalMessage.textContent = winnerMessage;
+            reviewMistakesBtn.style.display = 'none';
+        } else {
+             const finalScore = state.score;
+             const total = (state.quizMode === CONSTS.QUIZ_MODES.GUIDED || state.timerMode === CONSTS.TIMER_MODES.MARATHON) ? state.answeredCount : state.totalQuestions;
+             const percentage = total > 0 ? Math.round((finalScore / total) * 100) : 0;
+             const remainingMistakes = state.quizSessionLog.filter(q => q.attempts.length === 0 || !q.attempts[q.attempts.length - 1].isCorrect).length;
+             reviewMistakesBtn.style.display = (state.quizType === CONSTS.QUIZ_TYPES.TEST && remainingMistakes > 0) ? 'inline-flex' : 'none';
+             finalScoreText.textContent = `${finalScore} مِنْ ${total} (${percentage}%)`;
+             finalMessage.textContent = "عَمَلٌ رَائِعٌ! وَاصِلْ جُهُودَكَ الطَّيِّبَةَ.";
+        }
+        
+        const hadithEnd = document.getElementById('hadith-display-end');
+        displayRandomHadith(hadithEnd);
+    }
+
+    function resetQuiz() {
+        clearQuizState();
+        clearInterval(state.currentTimerId);
+        speechSynthesis.cancel();
+        finalScoreModal.classList.remove('visible');
+        quizWrapper.style.display = 'none';
+        desktopClock.style.display = 'flex';
+        document.getElementById('main-container').classList.remove('quiz-active');
+        quizSetup.style.display = 'block';
+        quizContainer.innerHTML = '';
+        displayRandomHadith(hadithStart);
+        updateControlButtonsVisibility();
+    }
+    
+    function saveAppSettings() { 
+        appSettings.fontSize = document.documentElement.style.fontSize;
+        localStorage.setItem('quizAppSettingsV3', JSON.stringify(appSettings)); 
+    }
+    function changeFontSize(direction) {
+        const htmlEl = document.documentElement;
+        let currentSize = parseFloat(window.getComputedStyle(htmlEl).fontSize) || 16;
+        const step = 1, minSize = 14, maxSize = 22;
+        let newSize = (direction === 'increase') ? Math.min(maxSize, currentSize + step) : Math.max(minSize, currentSize - step);
+        htmlEl.style.fontSize = `${newSize}px`;
+        saveAppSettings();
+    }
+    
+    function changeAccentColor(color) {
+        document.documentElement.style.setProperty('--accent-color', color);
+        appSettings.accentColor = color;
+        saveAppSettings();
+        document.querySelectorAll('.color-swatch').forEach(swatch => swatch.classList.toggle('selected', swatch.dataset.color === color));
+    }
+    
+    function updateShowHideFeatureButtonUI() {
+        const btn = document.getElementById('toggle-show-hide-btn');
+        if (!btn) return;
+        const isEnabled = appSettings.showHideAnswersEnabled;
+        btn.classList.toggle('selected', isEnabled);
+        btn.querySelector('i').className = isEnabled ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+        btn.querySelector('span').textContent = `إِظْهَارُ الْأَجْوِبَةِ (${isEnabled ? 'مُفَعَّلٌ' : 'مُعَطَّلٌ'})`;
+    }
+
+    function toggleShowHideFeature() {
+        appSettings.showHideAnswersEnabled = !appSettings.showHideAnswersEnabled;
+        saveAppSettings();
+        updateShowHideFeatureButtonUI();
+        updateControlButtonsVisibility();
+    }
+
+    function updateControlButtonsVisibility() {
+        const quizIsActive = quizWrapper.style.display === 'block';
+        const showAllBtn = document.getElementById('show-all-btn');
+        const hideAllBtn = document.getElementById('hide-all-btn');
+        
+        if (!quizIsActive || !appSettings.showHideAnswersEnabled) {
+            showAllBtn.style.display = 'none';
+            hideAllBtn.style.display = 'none';
+            return;
+        }
+        
+        const allAnswersRevealed = quizContainer.children.length > 0 && !quizContainer.querySelector('.question-card:not(.revealed)');
+
+        if (allAnswersRevealed) {
+            showAllBtn.style.display = 'none';
+            hideAllBtn.style.display = 'inline-flex';
+        } else {
+            showAllBtn.style.display = 'inline-flex';
+            hideAllBtn.style.display = 'none';
+        }
+    }
+
+    function loadAppSettings() {
+        const savedSettings = localStorage.getItem('quizAppSettingsV3');
+        if(savedSettings) {
+            appSettings = { ...appSettings, ...JSON.parse(savedSettings) };
+            if(appSettings.fontSize) document.documentElement.style.fontSize = appSettings.fontSize;
+        }
+        changeAccentColor(appSettings.accentColor || '#00a99d');
+        updateShowHideFeatureButtonUI();
+    }
+    function saveShortcuts() { localStorage.setItem('customShortcutsV3', JSON.stringify(shortcuts)); }
+    function loadShortcuts() {
+        const saved = localStorage.getItem('customShortcutsV3');
+        if(saved) shortcuts = { ...defaultShortcuts, ...JSON.parse(saved) };
+    }
+    function populateShortcutsModal() {
+        shortcutsList.innerHTML = Object.keys(shortcutLabels).map(action => `<div class="shortcut-item"><strong>${shortcutLabels[action]}</strong><button class="shortcut-key-btn" data-action="listen-for-shortcut" data-shortcut-action="${action}">${shortcuts[action]}</button></div>`).join('');
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const timeString = new Intl.DateTimeFormat('ar-SA', timeOptions).format(now);
+        const hijriOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const hijriString = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', hijriOptions).format(now);
+        desktopClockDisplay.innerHTML = `<span>${hijriString}</span><br><span>${timeString}</span>`;
+    }
+
+    function formatDuration(ms) {
+        let seconds = Math.floor(ms / 1000); let minutes = Math.floor(seconds / 60); let hours = Math.floor(minutes / 60);
+        seconds %= 60; minutes %= 60;
+        return [hours, minutes, seconds].map(v => v.toString().padStart(2, '0')).join(':');
+    }
+
+    function generateAndShowStats() {
+        const durationMs = state.sessionEndTime - state.sessionStartTime;
+        document.getElementById('session-summary-stats').innerHTML = `<div class="summary-item"><span class="value">${new Date(state.sessionStartTime).toLocaleDateString('ar-SA')}</span><span class="label">التاريخ</span></div><div class="summary-item"><span class="value">${formatDuration(durationMs)}</span><span class="label">المدة</span></div>`;
+        
+        const allAttempts = state.quizSessionLog.flatMap(q => q.attempts);
+        const firstTryCorrect = state.quizSessionLog.filter(q => q.attempts.length > 0 && q.attempts[0].isCorrect).length;
+        const finalCorrect = state.quizSessionLog.filter(q => q.attempts.length > 0 && q.attempts[q.attempts.length-1].isCorrect).length;
+        const totalTime = allAttempts.reduce((sum, a) => sum + a.timeTaken, 0);
+        
+        document.getElementById('performance-metrics-stats').innerHTML = `<div class="summary-item"><span class="value">${(finalCorrect / state.quizSessionLog.length * 100).toFixed(1)}%</span><span class="label">الدقة النهائية</span></div><div class="summary-item"><span class="value">${(firstTryCorrect / state.quizSessionLog.length * 100).toFixed(1)}%</span><span class="label">دقة المحاولة الأولى</span></div><div class="summary-item"><span class="value">${(totalTime / allAttempts.length).toFixed(1)} ث</span><span class="label">متوسط الوقت</span></div>`;
+
+        document.getElementById('stats-details-list').innerHTML = state.quizSessionLog.map((item, index) => {
+            const lastAttempt = item.attempts[item.attempts.length - 1];
+            const choiceText = lastAttempt ? (lastAttempt.choice === 'correct' ? 'صح' : 'خطأ') : 'لم تجب';
+            return `<p><strong>س${index+1}:</strong> ${item.statement} -> إجابتك: ${choiceText}</p>`;
+        }).join('');
+        statsModal.classList.add('visible');
+    }
+
+    function displayRandomHadith(container) {
+        const randomIndex = Math.floor(Math.random() * hadithLibrary.length);
+        container.innerHTML = `<i class="fa-solid fa-quote-right"></i><p class="hadith-text">${hadithLibrary[randomIndex].text}</p><p class="hadith-source">${hadithLibrary[randomIndex].source}</p>`;
+    }
+
+    function readAloud(text, button) {
+        if (speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+        const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'ar-SA';
+        const icon = button.querySelector('i');
+        const originalIconClass = icon.className;
+        utterance.onstart = () => icon.className = 'fa-solid fa-stop';
+        utterance.onend = () => icon.className = originalIconClass;
+        utterance.onerror = () => icon.className = originalIconClass;
+        speechSynthesis.speak(utterance);
+    }
+
+    function copyToClipboard(text, button) {
+        navigator.clipboard.writeText(text).then(() => {
+            showNotification('تَمَّ النَّسْخُ بِنَجَاحٍ.', 'success');
+            if(button) {
+                const icon = button.querySelector('i'); const originalIconClass = icon.className;
+                icon.className = 'fa-solid fa-check'; button.disabled = true;
+                setTimeout(() => { icon.className = originalIconClass; button.disabled = false; }, 1500);
+            }
+        }).catch(err => showNotification('فَشِلَ النَّسْخُ.', 'error'));
+    }
+
+    function generateContent(data, includeCorrection, isHadith = false) {
+        return data.map((item, i) => {
+            if (isHadith) {
+                return `<div><p><strong>${i+1}.</strong> ${item.text}</p><p class="print-answer"><strong>المصدر:</strong> ${item.source}</p></div>`;
+            }
+            let correctionPart = includeCorrection ? `<p class="print-answer"><strong>التَّصْوِيبُ:</strong> ${item.correction}</p>` : '';
+            return `<div><p><strong>${i+1}.</strong> ${item.statement}</p>${correctionPart}</div>`;
+        }).join('');
+    }
+    
+    function generateTxt(data, includeCorrection, isHadith = false) {
+        return data.map((item, i) => {
+             if (isHadith) {
+                return `${i + 1}. ${item.text}\n   - المصدر: ${item.source}`;
+            }
+            let text = `${i + 1}. ${item.statement}`;
+            if (includeCorrection) {
+                text += `\n   - التَّصْوِيبُ: ${item.correction}`;
+            }
+            return text;
+        }).join('\n\n---\n\n');
+    }
+    
+    function prepareAndPrint(title, content) {
+        printContent.innerHTML = `<h1>${title}</h1>${content}`;
+        window.print();
+        printContent.innerHTML = '';
+    }
+    
+    async function loadExportLibraries() {
+        if (exportLibrariesLoaded) return true;
+        try {
+            if (window.jspdf && window.html2canvas) {
+                exportLibrariesLoaded = true;
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error("Failed to confirm export libraries:", error);
+            showNotification('فَشِلَ تَحْمِيلُ مَكْتَبَاتِ التَّصْدِيرِ.', 'error');
+            return false;
+        }
+    }
+
+    async function exportToPdf(button, fileName, title, content) {
+        const icon = button.querySelector('i'); const originalIconClass = icon.className;
+        button.disabled = true; icon.className = 'fa-solid fa-spinner fa-spin';
+
+        const loaded = await loadExportLibraries();
+        if (!loaded) {
+            button.disabled = false; icon.className = originalIconClass;
+            return;
+        }
+        
+        try {
+            printContent.innerHTML = `<h1>${title}</h1>${content}`;
+            printContent.classList.add('pdf-export-prepare');
+            const canvas = await html2canvas(printContent, { scale: 2, useCORS: true });
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = canvas.height * pdfWidth / canvas.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+            pdf.save(fileName);
+            showNotification('تَمَّ تَصْدِيرُ مِلَفِّ PDF.', 'success');
+        } catch (error) { 
+            console.error("PDF export failed:", error); 
+            showNotification('فَشِلَ تَصْدِيرُ مِلَفِّ PDF.', 'error');
+        } finally {
+            printContent.classList.remove('pdf-export-prepare');
+            printContent.innerHTML = '';
+            button.disabled = false;
+            icon.className = originalIconClass;
+        }
+    }
+    
+    function exportToTxt(fileName, content) {
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showNotification('تَمَّ تَصْدِيرُ مِلَفِّ TXT.', 'success');
+    }
+
+    // ======================================================
+    // ==      محرك المظاهر - الدوال الأساسية وحفظ الإعدادات      ==
+    // ======================================================
+    function stopAllAnimations() {
+        if (activeAnimationId) {
+            cancelAnimationFrame(activeAnimationId);
+            activeAnimationId = null;
+        }
+        if(perspectiveHandler) {
+            document.body.removeEventListener('mousemove', perspectiveHandler);
+            perspectiveHandler = null;
+        }
+        if(waterRippleHandler) {
+            document.removeEventListener('mousemove', waterRippleHandler);
+            waterRippleHandler = null;
+        }
+        const ctx = backgroundEffectsCanvas.getContext('2d');
+        ctx.clearRect(0, 0, backgroundEffectsCanvas.width, backgroundEffectsCanvas.height);
+    }
+    
+    function startPerspectiveAnimation() {
+        perspectiveHandler = (e) => {
+            const { clientX, clientY } = e; const { innerWidth, innerHeight } = window;
+            const x = (clientX / innerWidth - 0.5) * 2; const y = (clientY / innerHeight - 0.5) * 2;
+            document.documentElement.style.setProperty('--mouse-x', `${x * -10}deg`);
+            document.documentElement.style.setProperty('--mouse-y', `${y * 10}deg`);
+            document.documentElement.style.setProperty('--shadow-offset-x', `${x * -20}px`);
+            document.documentElement.style.setProperty('--shadow-offset-y', `${y * -20}px`);
+        };
+        document.body.addEventListener('mousemove', perspectiveHandler);
+    }
+
+    function startParticleAnimation(canvas) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray = [];
+        const numberOfParticles = (canvas.height * canvas.width) / 9000;
+
+        class Particle {
+            constructor(x, y, dirX, dirY, size, color) { this.x = x; this.y = y; this.dirX = dirX; this.dirY = dirY; this.size = size; this.color = color; }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = '#8C98A5'; ctx.fill(); }
+            update() { if (this.x > canvas.width || this.x < 0) this.dirX = -this.dirX; if (this.y > canvas.height || this.y < 0) this.dirY = -this.dirY; this.x += this.dirX; this.y += this.dirY; this.draw(); }
+        }
+
+        function init() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2); let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let dirX = (Math.random() * .4) - 0.2; let dirY = (Math.random() * .4) - 0.2;
+                particlesArray.push(new Particle(x, y, dirX, dirY, size, '#e0e0ff'));
+            }
+        }
+
+        function connect() {
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                         let opacityValue = 1 - (distance / 20000);
+                         ctx.strokeStyle = `rgba(140, 152, 165, ${opacityValue})`; ctx.lineWidth = 1;
+                         ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
+                    }
+                }
+            }
+        }
+        function animate() { activeAnimationId = requestAnimationFrame(animate); ctx.clearRect(0, 0, innerWidth, innerHeight); particlesArray.forEach(p => p.update()); connect(); }
+        init(); animate();
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; init(); });
+    }
+
+    function startWaterRipples(canvas) {
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const ctx = canvas.getContext('2d');
+        let ripple = { x: -100, y: -100, radius: 0, maxRadius: Math.min(canvas.width, canvas.height) * 0.8, speed: 5, lineWidth: 1, alpha: 1, };
+    
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (ripple.radius < ripple.maxRadius) { ripple.radius += ripple.speed; ripple.lineWidth += 0.1; ripple.alpha -= 0.01; }
+            if (ripple.alpha > 0) { ctx.strokeStyle = `rgba(148, 210, 189, ${ripple.alpha})`; ctx.lineWidth = ripple.lineWidth; ctx.beginPath(); ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2); ctx.stroke(); }
+            activeAnimationId = requestAnimationFrame(animate);
+        }
+        
+        waterRippleHandler = (e) => {
+            ripple.x = e.clientX; ripple.y = e.clientY; ripple.radius = 0; ripple.alpha = 1; ripple.lineWidth = 1;
+        };
+        
+        document.addEventListener('mousemove', waterRippleHandler);
+        animate();
+    }
+    
+    function startInkBloomAnimation(canvas) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const colors = ['#d90429', '#ef233c', '#8d99ae', '#2b2d42']; let blobs = [];
+        class Blob { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = Math.random() * 2 - 1; this.vy = Math.random() * 2 - 1; this.radius = Math.random() * 100 + 50; this.color = colors[Math.floor(Math.random() * colors.length)]; } update() { this.x += this.vx; this.y += this.vy; if(this.x > canvas.width + this.radius) this.x = -this.radius; if(this.x < -this.radius) this.x = canvas.width + this.radius; if(this.y > canvas.height + this.radius) this.y = -this.radius; if(this.y < -this.radius) this.y = canvas.height + this.radius; } draw() { ctx.beginPath(); const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius); gradient.addColorStop(0, this.color + '80'); gradient.addColorStop(1, this.color + '00'); ctx.fillStyle = gradient; ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.fill(); } }
+        for(let i=0; i<10; i++) blobs.push(new Blob());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); blobs.forEach(b => { b.update(); b.draw(); }); activeAnimationId = requestAnimationFrame(animate); }
+        animate();
+    }
+
+    function startSandstormAnimation(canvas) {
+        const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const particles = []; const particleCount = 200;
+        for (let i = 0; i < particleCount; i++) { particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 3 + 1, speed: Math.random() * 2 + 1, opacity: Math.random() * 0.5 + 0.2 }); }
+        function animate() {
+            activeAnimationId = requestAnimationFrame(animate); ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speed; p.y += Math.sin(p.x * 0.01) * 0.5;
+                if (p.x > canvas.width) { p.x = 0; p.y = Math.random() * canvas.height; }
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(210, 180, 140, ${p.opacity})`; ctx.fill();
+            });
+        }
+        animate();
+    }
+
+    function applyTheme() {
+        const theme = {};
+        themeSelectors.forEach(select => { const group = select.id.replace('-select', ''); theme[group] = select.value; });
+
+        stopAllAnimations();
+
+        const classesToRemove = document.body.className.split(' ').filter(c => c.startsWith('palette-') || c.startsWith('style-') || c.startsWith('font-') || c.startsWith('bg-') || c.startsWith('density-') || c.startsWith('depth-'));
+        document.body.classList.remove(...classesToRemove);
+        
+        Object.keys(theme).forEach(group => {
+            const prefix = group === 'background' ? 'bg-' : `${group}-`;
+            document.body.classList.add(`${prefix}${theme[group]}`);
+        });
+
+        if (theme.background === 'particle-grid') startParticleAnimation(backgroundEffectsCanvas);
+        else if (theme.background === 'water-ripple') startWaterRipples(backgroundEffectsCanvas);
+        else if (theme.background === 'ink-bloom') startInkBloomAnimation(backgroundEffectsCanvas);
+        else if (theme.background === 'sandstorm') startSandstormAnimation(backgroundEffectsCanvas);
+        
+        if(theme.style === 'perspective') startPerspectiveAnimation();
+
+        saveTheme(theme);
+        updateActivePresetButton();
+    }
+
+    function saveTheme(theme) {
+        localStorage.setItem('userTheme', JSON.stringify(theme));
+    }
+    
+    function updateActivePresetButton() {
+        const currentTheme = {};
+        themeSelectors.forEach(select => { const group = select.id.replace('-select', ''); currentTheme[group] = select.value; });
+
+        let activePreset = null;
+        document.querySelectorAll('.settings-section-btn[data-preset]').forEach(btn => {
+            const presetName = btn.dataset.preset;
+            const presetTheme = themePresets[presetName];
+            const isMatch = presetTheme && Object.keys(presetTheme).every(key => presetTheme[key] === currentTheme[key]);
+            if (isMatch) activePreset = presetName;
+            btn.classList.remove('selected');
+        });
+
+        if (activePreset) {
+            document.querySelector(`.settings-section-btn[data-preset="${activePreset}"]`)?.classList.add('selected');
+        }
+    }
+
+    function applyPreset(presetName) {
+        const preset = themePresets[presetName];
+        if (preset) {
+            themeSelectors.forEach(select => {
+                const group = select.id.replace('-select', '');
+                if (preset[group]) select.value = preset[group];
+            });
+            applyTheme();
+        }
+    }
+
+    function loadTheme() {
+        const defaultTheme = { palette: 'light', style: 'neumorphism', font: 'uthman', density: 'comfortable', background: 'solid' };
+        const savedTheme = JSON.parse(localStorage.getItem('userTheme')) || defaultTheme;
+        
+        themeSelectors.forEach(select => {
+            const group = select.id.replace('-select', '');
+            if (savedTheme[group]) select.value = savedTheme[group];
+        });
+        applyTheme();
+    }
+
+    const actionHandler = {
+        'open-modal': (btn) => {
+            const modalId = btn.dataset.modalId;
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                const parentModal = btn.closest('.simple-modal');
+                if (parentModal) {
+                    parentModal.classList.remove('visible');
+                    modal.dataset.parentModal = parentModal.id;
+                    modal.classList.add('on-top');
+                }
+                modal.classList.add('visible');
+                if(modalId === 'shortcuts-modal') populateShortcutsModal();
+                if(modalId === 'settings-modal') updateResumeButtonVisibility();
+                if (modalId === 'changelog-modal') {
+                    document.getElementById('changelog-content').innerHTML = changelogData.map(entry => `
+                        <h3>${entry.version}</h3>
+                        <ul>${entry.changes.map(change => `<li>${change}</li>`).join('')}</ul>
+                        ${changelogData.indexOf(entry) < changelogData.length - 1 ? '<hr style="margin: 15px 0; border-color: var(--border-color);">' : ''}
+                    `).join('');
+                }
+                if (modalId === 'ai-guide-modal') {
+                    document.getElementById('hadith-count-guide').textContent = hadithLibrary.length;
+                    document.getElementById('question-count-guide').textContent = fullQuizData.length;
+                }
+            }
+        },
+        'select-quiz-type': (btn) => {
+            state.quizType = btn.dataset.type;
+            document.querySelectorAll('.quiz-type-selector').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            const learning = document.getElementById('learning-modes-container');
+            const test = document.getElementById('test-modes-container');
+            const competition = document.getElementById('competition-modes-container');
+            learning.style.display = state.quizType === 'learning' ? 'block' : 'none';
+            test.style.display = state.quizType === 'test' ? 'block' : 'none';
+            competition.style.display = state.quizType === 'competition' ? 'block' : 'none';
+            document.getElementById('start-button-text').textContent = (state.quizType === 'competition') ? 'اِبْدَأِ الْمُنَافَسَةَ' : 'اِبْدَأِ الِاخْتِبَارَ';
+            quizSetupModal.querySelector('.modal-buttons').style.display = 'grid';
+            if(state.quizType === 'learning') actionHandler['select-quiz-mode'](learning.querySelector('[data-mode="flashcard"]'));
+            if(state.quizType === 'test') actionHandler['select-quiz-mode'](test.querySelector('[data-mode="normal"]'));
+        },
+        'select-quiz-mode': (btn) => {
+            state.quizMode = btn.dataset.mode;
+            document.querySelectorAll('.quiz-mode-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('tf-slider-container').style.display = state.quizMode === 'normal' && state.timerMode === 'none' ? 'block' : 'none';
+            document.getElementById('timer-options-container').style.display = state.quizMode === 'normal' ? 'block' : 'none';
+        },
+        'select-timer-mode': (btn) => {
+            state.timerMode = btn.dataset.mode;
+            document.querySelectorAll('#timer-options .settings-section-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            document.getElementById('tf-slider-container').style.display = state.timerMode === 'none' ? 'block' : 'none';
+            document.getElementById('marathon-options-container').style.display = state.timerMode === 'marathon' ? 'block' : 'none';
+        },
+        'toggle-marathon-timer': (btn) => {
+            state.marathonHasTimer = !state.marathonHasTimer;
+            btn.classList.toggle('selected', state.marathonHasTimer);
+            btn.querySelector('span').textContent = state.marathonHasTimer ? 'الْمُؤَقِّتُ مُفَعَّلٌ' : 'الْمُؤَقِّتُ مُعَطَّلٌ';
+        },
+        'toggle-marathon-lives': (btn) => {
+            state.marathonHasLives = !state.marathonHasLives;
+            btn.classList.toggle('selected', state.marathonHasLives);
+            btn.querySelector('span').textContent = state.marathonHasLives ? 'الْمُحَاوَلَاتُ مُفَعَّلَةٌ' : 'الْمُحَاوَلَاتُ مُعَطَّلَةٌ';
+        },
+        'start-quiz-from-setup': () => { quizSetupModal.classList.remove('visible'); startQuiz(); },
+        'reset-quiz': () => resetQuiz(),
+        'review-mistakes': () => {
+            const mistakes = state.quizSessionLog.filter(q => !q.attempts.length || !q.attempts[q.attempts.length - 1].isCorrect);
+            if (mistakes.length) startQuiz(true, mistakes);
+        },
+        'show-stats': () => { finalScoreModal.classList.remove('visible'); generateAndShowStats(); },
+        'toggle-pause': () => toggleTimerPause(),
+        'show-all-answers': (btn) => {
+            quizContainer.querySelectorAll('.question-card:not(.revealed)').forEach((card, i) => revealAnswer(card, false, state.currentQuizData[i]));
+            state.answeredCount = state.totalQuestions; state.score=0; updateStats();
+            updateControlButtonsVisibility();
+        },
+        'hide-all-answers': (btn) => {
+            buildQuiz(state.currentQuizData); state.answeredCount = 0; state.score=0; updateStats();
+            updateControlButtonsVisibility();
+        },
+        'submit-answer': (btn) => {
+            const card = btn.closest('.question-card');
+            if(card && !card.classList.contains('revealed')) processAnswer(card, btn.dataset.choice);
+        },
+        'reveal-answer': (btn) => {
+            const card = btn.closest('.question-card');
+            if(card && !card.classList.contains('revealed')) {
+                 revealAnswer(card, true, fullQuizData.find(q => q.statement === card.dataset.statement));
+                 setTimeout(showNextMarathonQuestion, 1200);
+            }
+        },
+        'read-aloud': (btn) => {
+            const card = btn.closest('.question-card');
+            if(card) {
+                const type = btn.dataset.type;
+                const data = fullQuizData.find(q => q.statement === card.dataset.statement);
+                const text = type === 'question' ? data.statement : `التَّصْوِيبُ: ${data.correction}. الشَّرْحُ: ${data.explanation}`;
+                readAloud(text, btn);
+            }
+        },
+        'toggle-favorite': (btn) => {
+            const card = btn.closest('.question-card');
+            if(card) {
+                toggleFavorite(card.dataset.statement);
+                btn.querySelector('i').classList.toggle('fa-regular'); btn.querySelector('i').classList.toggle('fa-solid'); btn.querySelector('i').classList.toggle('favorited');
+            }
+        },
+        'show-explanation': (btn) => {
+            const questionData = fullQuizData.find(q => q.statement === btn.closest('.question-card').dataset.statement);
+            if(questionData && questionData.explanation) {
+                explanationTitle.innerHTML = '<i class="fa-solid fa-book-open"></i> إِيضَاحُ الْمَسْأَلَةِ';
+                explanationText.textContent = questionData.explanation;
+                explanationModal.classList.add('visible');
+            }
+        },
+        'show-hint': (btn) => {
+            const questionData = fullQuizData.find(q => q.statement === btn.closest('.question-card').dataset.statement);
+            if (questionData && questionData.hint) {
+                explanationTitle.innerHTML = '<i class="fa-solid fa-lightbulb"></i> تَلْمِيحٌ';
+                explanationText.textContent = questionData.hint;
+                explanationModal.classList.add('visible');
+            }
+        },
+        'copy-text': (btn) => {
+            const card = btn.closest('.question-card');
+            const data = fullQuizData.find(q => q.statement === card.dataset.statement);
+            const textToCopy = btn.dataset.type === 'question' ? data.statement : `السُّؤَالُ: ${data.statement}\n\nالْجَوَابُ: ${data.correction}`;
+            copyToClipboard(textToCopy, btn);
+        },
+        'toggle-show-hide-feature': () => toggleShowHideFeature(),
+        'resume-quiz': (btn) => {
+            btn.closest('.simple-modal').classList.remove('visible');
+            if(loadQuizState()) {
+                quizSetup.style.display = 'none'; quizWrapper.style.display = 'block';
+                desktopClock.style.display = 'none';
+                document.getElementById('main-container').classList.add('quiz-active');
+                buildQuiz(state.currentQuizData);
+                state.currentQuizData.forEach((item, index) => {
+                    const sessionItem = state.quizSessionLog.find(q => q.statement === item.statement);
+                    if (sessionItem && sessionItem.attempts.length > 0) {
+                        revealAnswer(quizContainer.children[index], sessionItem.attempts.slice(-1)[0].isCorrect, item);
+                    }
+                });
+                updateStats();
+            }
+        },
+        'clear-data': () => {
+            if(confirm('هَلْ أَنْتَ مُتَأَكِّدٌ مِنْ رَغْبَتِكَ فِي مَسْحِ كُلِّ الْبَيَانَاتِ الْمَحْفُوظَةِ؟')) {
+                localStorage.clear();
+                showNotification('تَمَّ مَسْحُ الْبَيَانَاتِ بِنَجَاحٍ.', 'success');
+                setTimeout(() => window.location.reload(), 1000);
+            }
+        },
+        'listen-for-shortcut': (btn) => {
+            btn.textContent = '...'; btn.classList.add('listening');
+            window.addEventListener('keydown', (e) => {
+                e.preventDefault();
+                shortcuts[btn.dataset.shortcutAction] = e.key;
+                saveShortcuts();
+                populateShortcutsModal();
+            }, {once: true});
+        },
+        'reset-shortcuts': () => {
+            shortcuts = { ...defaultShortcuts };
+            saveShortcuts();
+            populateShortcutsModal();
+        },
+        'print-questions': () => { if(state.currentQuizData.length > 0) prepareAndPrint('أَسْئِلَةُ الْجَوْلَةِ الْحَالِيَّةِ', generateContent(state.currentQuizData, false)); },
+        'print-answers': () => { if(state.currentQuizData.length > 0) prepareAndPrint('أَجْوِبَةُ الْجَوْلَةِ الْحَالِيَّةِ', generateContent(state.currentQuizData, true)); },
+        'export-pdf-questions': (btn) => { if(state.currentQuizData.length > 0) exportToPdf(btn, 'quiz-questions.pdf', 'أَسْئِلَةُ الْجَوْلَةِ الْحَالِيَّةِ', generateContent(state.currentQuizData, false)); },
+        'export-pdf-answers': (btn) => { if(state.currentQuizData.length > 0) exportToPdf(btn, 'quiz-answers.pdf', 'أَجْوِبَةُ الْجَوْلَةِ الْحَالِيَّةِ', generateContent(state.currentQuizData, true)); },
+        'export-txt-questions': () => { if(state.currentQuizData.length > 0) exportToTxt('quiz-questions.txt', generateTxt(state.currentQuizData, false)); },
+        'export-txt-answers': () => { if(state.currentQuizData.length > 0) exportToTxt('quiz-answers.txt', generateTxt(state.currentQuizData, true)); },
+        'export-all-questions': (btn) => {
+            const type = btn.dataset.type;
+            const content = generateContent(fullQuizData, false);
+            const title = 'بَنْكُ الْأَسْئِلَةِ: الدَّرْسُ السَّابِعُ';
+            if (type === 'pdf') exportToPdf(btn, 'الأسئلة.pdf', title, content);
+            else if (type === 'print') prepareAndPrint(title, content);
+            else if (type === 'txt') exportToTxt('الأسئلة.txt', generateTxt(fullQuizData, false));
+        },
+        'export-all-answers': (btn) => {
+            const type = btn.dataset.type;
+            const content = generateContent(fullQuizData, true);
+            const title = 'بَنْكُ الْأَسْئِلَةِ وَأَجْوِبَتُهَا: الدَّرْسُ السَّابِعُ';
+            if (type === 'pdf') exportToPdf(btn, 'الأجوبة.pdf', title, content);
+            else if (type === 'print') prepareAndPrint(title, content);
+            else if (type === 'txt') exportToTxt('الأجوبة.txt', generateTxt(fullQuizData, true));
+        },
+        'export-all-hadith': (btn) => {
+            const type = btn.dataset.type;
+            const content = generateContent(hadithLibrary, false, true);
+            const title = 'مَكْتَبَةُ الْأَحَادِيثِ';
+            if (type === 'pdf') exportToPdf(btn, 'الأحاديث.pdf', title, content);
+            else if (type === 'print') prepareAndPrint(title, content);
+            else if (type === 'txt') exportToTxt('الأحاديث.txt', generateTxt(hadithLibrary, false, true));
+        },
+        'apply-preset': (btn) => {
+            applyPreset(btn.dataset.preset);
+        },
+    };
+    
+    document.body.addEventListener('click', e => {
+        const actionButton = e.target.closest('button[data-action]');
+        if (actionButton && actionHandler[actionButton.dataset.action]) {
+            e.preventDefault();
+            actionHandler[actionButton.dataset.action](actionButton);
+        }
+
+        const toggleButton = e.target.closest('[data-toggles]');
+        if (toggleButton) {
+            e.stopPropagation();
+            const menuId = toggleButton.dataset.toggles;
+            const menuToToggle = document.getElementById(menuId);
+            
+            if (activeMenu && activeMenu !== menuToToggle) {
+                activeMenu.classList.remove('visible');
+            }
+            if (menuToToggle) {
+                menuToToggle.classList.toggle('visible');
+                activeMenu = menuToToggle.classList.contains('visible') ? menuToToggle : null;
+            }
+        } else if (!e.target.closest('.control-menu-container')) {
+             if (activeMenu) {
+                activeMenu.classList.remove('visible');
+                activeMenu = null;
+             }
+        }
+
+        if (e.target.closest('.color-swatch')) {
+            changeAccentColor(e.target.dataset.color);
+        }
+        if (e.target.matches('.modal-close-btn') || e.target.classList.contains('simple-modal')) {
+            const modalToClose = e.target.closest('.simple-modal');
+            if (modalToClose) {
+                const parentModalId = modalToClose.dataset.parentModal;
+                modalToClose.classList.remove('visible', 'on-top');
+                if (parentModalId) {
+                    document.getElementById(parentModalId)?.classList.add('visible');
+                    delete modalToClose.dataset.parentModal;
+                }
+            }
+        }
+    });
+
+    document.addEventListener('keydown', e => {
+        const activeModal = document.querySelector('.simple-modal.visible');
+        if (e.key.toLowerCase() === shortcuts.closeModals.toLowerCase() && activeModal) {
+             const parentModalId = activeModal.dataset.parentModal;
+             activeModal.classList.remove('visible', 'on-top');
+             if (parentModalId) {
+                 document.getElementById(parentModalId)?.classList.add('visible');
+                 delete activeModal.dataset.parentModal;
+             }
+        }
+        if (activeModal || quizWrapper.style.display !== 'block' || state.isPaused) return;
+
+        const firstCard = quizContainer.querySelector('.question-card:not(.revealed)');
+        if (firstCard) {
+            const keyMap = { [shortcuts.correct]: '[data-choice="correct"]', [shortcuts.incorrect]: '[data-choice="incorrect"]', [shortcuts.readQuestion]: '[data-type="question"]', [shortcuts.toggleFavorite]: '[data-action="toggle-favorite"]', [shortcuts.showHint]: '[data-action="show-hint"]' };
+            const selector = keyMap[e.key.toLowerCase()];
+            if (selector) { e.preventDefault(); firstCard.querySelector(selector)?.click(); }
+        }
+
+        const lastRevealed = quizContainer.querySelector('.question-card.revealed:last-of-type');
+        if (lastRevealed && e.key.toLowerCase() === shortcuts.readCorrection.toLowerCase()) {
+            lastRevealed.querySelector('[data-action="read-aloud"][data-type="correction"]')?.click();
+        }
+    });
+
+    pauseOverlay.addEventListener('click', () => {
+        if (state.isPaused) {
+            toggleTimerPause();
+        }
+    });
+
+    // Initializations
+    loadAppSettings();
+    loadShortcuts();
+    tfSlider.max = fullQuizData.length;
+    tfSlider.addEventListener('input', () => tfSliderValue.textContent = tfSlider.value);
+    const compSlider = document.getElementById('competition-question-count-slider');
+    compSlider.max = Math.floor(fullQuizData.length / 2);
+    compSlider.addEventListener('input', () => document.getElementById('competition-question-count-value').textContent = compSlider.value);
+    displayRandomHadith(hadithStart);
+    updateClock();
+    setInterval(updateClock, 1000);
+    updateControlButtonsVisibility();
+    
+    // Theme Generator Initialization
+    themeSelectors.forEach(select => select.addEventListener('change', applyTheme));
+    loadTheme();
+});
+
+// جزء تسجيل الدخول الجديد
+    const loginOverlay = document.getElementById('login-overlay');
+    const passwordInput = document.getElementById('password-input');
+    const loginButton = document.getElementById('login-button');
+    const correctPassword = "123456"; // تغيير كلمة المرور هنا
+
+    loginButton.addEventListener('click', () => {
+        if (passwordInput.value === correctPassword) {
+            loginOverlay.style.display = 'none';
+        } else {
+            showNotification('كلمة المرور خاطئة. حاول مرة أخرى.', 'error');
+            passwordInput.value = '';
+        }
+    });
+
+    passwordInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            loginButton.click();
+        }
+    });
+    
+</script>
+
+<footer class="main-footer">
+    <div class="footer-logo">
+      <img src="img/icon12-removebg-preview.png" alt="Logo">
+      <h2>عِلْمُ مُصْطَلَحِ الْحَدِيثِ</h2>
+    </div>
+    <div class="footer-rights">© جميع الحقوق محفوظة لأبو حذيفة أكرم الشريف</div>
+    <div class="footer-links">
+      <a href="#"><i class="fa-solid fa-house"></i> الرئيسية</a>
+      <a href="#"><i class="fa-solid fa-book"></i> المكتبة</a>
+      <a href="#"><i class="fa-solid fa-envelope"></i> تواصل معنا</a>
+    </div>
+  </footer>
+
+</body>
+</html>
