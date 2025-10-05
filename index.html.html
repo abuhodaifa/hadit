@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اخْتِبَارُ الدَّرْسِ الْسَّابِعِ مِنْ شَرْحِ الْقَطْرِ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=KFGQPC+Uthman+Taha+Naskh:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #eef2f9; --card-bg: #eef2f9; --primary-color: #4a6d8c; --accent-color: #00a99d;
+            --text-color: #3b5266; --border-color: #d1d9e6; --correct-color: #00a99d; --incorrect-color: #e74c3c;
+            --shadow-light: #ffffff; --shadow-dark: #c8d0e0; --gold-color: #d4af37;
+            --neumorphism-shadow: 7px 7px 15px var(--shadow-dark), -7px -7px 15px var(--shadow-light);
+            --neumorphism-shadow-inset: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'KFGQPC Uthman Taha Naskh', serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            padding: 20px;
+            font-size: 1.1rem;
+        }
+        .main-container { width: 100%; max-width: 900px; animation: fadeIn 1s ease-in-out; margin: auto; }
+        .main-container.quiz-active { padding-top: 70px; }
+        .main-header { text-align: center; margin-bottom: 30px; }
+        .main-header h1 { font-family: 'KFGQPC Uthman Taha Naskh', serif; font-size: 3.5rem; color: var(--primary-color); font-weight: 700; }
+        
+        .hadith-display { padding: 25px; margin-bottom: 30px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--neumorphism-shadow); text-align: center; position: relative; border-right: 5px solid var(--gold-color); animation: slideInUp 0.8s ease-out; }
+        .hadith-display i.fa-quote-right { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: var(--border-color); }
+        .hadith-text { font-size: 1.6rem; line-height: 1.8; margin-bottom: 15px; font-weight: 700; }
+        .hadith-source { font-size: 1rem; color: var(--primary-color); font-weight: 700; }
+
+        .quiz-setup { padding: 30px 40px; background: var(--card-bg); border-radius: 20px; box-shadow: var(--neumorphism-shadow); text-align: center; animation: zoomIn 0.6s ease-out; }
+        .slider-container { margin: 15px 0 25px 0; }
+        .slider-container label { font-size: 1.2rem; font-weight: 700; }
+        #question-count-value { color: var(--accent-color); font-weight: 700; font-size: 1.5rem; }
+        #question-count-slider { width: 100%; margin-top: 15px; -webkit-appearance: none; appearance: none; height: 10px; background: var(--border-color); border-radius: 5px; box-shadow: var(--neumorphism-shadow-inset); }
+        #question-count-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; background: var(--accent-color); border-radius: 50%; cursor: pointer; box-shadow: var(--neumorphism-shadow); }
+        
+        .setup-options-container { display: flex; justify-content: center; margin-bottom: 25px; position: relative; }
+        #timer-options-btn {
+            font-family: inherit; font-size: 1.2rem; font-weight: 700; padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer;
+            background: var(--card-bg); box-shadow: var(--neumorphism-shadow); color: var(--text-color);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        #current-timer-mode { color: var(--accent-color); }
+        #timer-options-menu {
+            position: absolute; top: 110%; left: 50%;
+            background: var(--card-bg); border-radius: 15px; box-shadow: var(--neumorphism-shadow);
+            padding: 10px; width: 320px; z-index: 10;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            transform-origin: top center; transform: translateX(-50%) translateY(-10px) scale(0.9);
+        }
+        #timer-options-menu.visible { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) scale(1); }
+
+        .setup-buttons { display: flex; justify-content: center; align-items: center; gap: 20px; position: relative; }
+        .setup-btn { width: 80px; height: 80px; font-size: 2rem; color: white; border: none; cursor: pointer; box-shadow: var(--neumorphism-shadow); transition: all 0.2s ease; display: inline-flex; justify-content: center; align-items: center; }
+        .setup-btn:hover { filter: brightness(1.1); }
+        .setup-btn:active { box-shadow: var(--neumorphism-shadow-inset); transform: scale(0.95); }
+        #start-btn { background-color: var(--accent-color); border-radius: 25px; }
+        #settings-btn { background-color: var(--primary-color); border-radius: 25px; }
+
+        #settings-menu { position: absolute; bottom: 95px; left: 50%; background: var(--card-bg); border-radius: 15px; box-shadow: var(--neumorphism-shadow); padding: 10px; width: 340px; z-index: 10; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s; transform-origin: bottom center; transform: translateX(-50%) translateY(10px) scale(0.9); }
+        #settings-menu.visible { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) scale(1); }
+        .settings-option { display: flex; align-items: center; width: 100%; text-align: right; padding: 12px 15px; margin: 5px 0; font-family: inherit; font-size: 1rem; background-color: transparent; border: none; cursor: pointer; border-radius: 10px; color: var(--text-color); transition: background-color 0.2s, color 0.2s; }
+        .settings-option:hover { background-color: var(--border-color); }
+        .settings-option.selected { background-color: var(--border-color); color: var(--accent-color); font-weight: bold; }
+        .settings-option i { margin-left: 10px; width: 20px; }
+        .settings-option .fa-spinner { animation: fa-spin 2s infinite linear; }
+        #settings-menu hr, .control-menu hr { border: none; height: 1px; background-color: var(--border-color); margin: 5px 10px; }
+
+        .quiz-wrapper { display: none; }
+        .stats-and-controls { position: fixed; top: 10px; right: 0; left: 0; margin: auto; width: calc(100% - 40px); max-width: 900px; padding: 15px 25px; background: rgba(238, 242, 249, 0.85); backdrop-filter: blur(8px); z-index: 100; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); transform: translateY(-58px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .stats-and-controls:hover, .stats-and-controls.touch-active { transform: translateY(0); }
+        .control-buttons-wrapper { padding-bottom: 15px; opacity: 0; transition: opacity 0.3s ease-in-out 0.1s; }
+        .stats-and-controls:hover .control-buttons-wrapper, .stats-and-controls.touch-active .control-buttons-wrapper { opacity: 1; }
+        .control-buttons { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+        .control-btn { padding: 8px 12px; font-family: inherit; font-weight: 700; font-size: 1rem; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s ease-in-out; background: var(--card-bg); color: var(--primary-color); box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); }
+        .control-btn:hover { color: var(--accent-color); }
+        .control-btn:active { transform: scale(0.95); box-shadow: var(--neumorphism-shadow-inset); }
+        .control-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+        
+        .control-menu-container { position: relative; display: inline-block; }
+        .control-menu {
+            position: absolute; top: 52px; left: 50%;
+            background: var(--card-bg); border-radius: 15px; box-shadow: var(--neumorphism-shadow);
+            padding: 10px; z-index: 101;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            transform-origin: top center; transform: translateX(-50%) translateY(-10px) scale(0.9);
+        }
+        .control-menu.visible { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) scale(1); }
+        #export-print-menu { width: 310px; }
+        #font-size-menu { width: 220px; }
+
+        .visible-bar { display: flex; align-items: center; gap: 20px; }
+        .stat-item { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); white-space: nowrap; }
+        .stat-item i { margin-left: 8px; color: var(--accent-color); }
+        .progress-container { width: 100%; height: 6px; background-color: var(--border-color); border-radius: 3px; overflow: hidden; box-shadow: var(--neumorphism-shadow-inset); }
+        .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-color), #00c7b6); border-radius: 3px; transition: width 0.5s ease-out; }
+
+        .global-timer span { color: var(--primary-color); }
+        .global-timer i { color: var(--accent-color); }
+        .global-timer.low-time, .global-timer.low-time span, .global-timer.low-time i {
+            color: var(--incorrect-color) !important; animation: pulse 1s infinite;
+        }
+
+        #quiz-container { display: grid; gap: 25px; }
+        .question-card { background: var(--card-bg); border-radius: 20px; box-shadow: var(--neumorphism-shadow); overflow: hidden; opacity: 0; animation: slideInUp 0.6s ease-out forwards; padding: 25px; }
+        .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .question-number { font-size: 1.2rem; font-weight: 700; background-color: var(--primary-color); color: white; min-width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; }
+        
+        .header-btn { background: none; border: none; font-size: 1rem; color: var(--border-color); cursor: pointer; transition: all 0.2s; padding: 5px; border-radius: 8px; margin-right: 5px; }
+        .header-btn:hover { color: var(--primary-color); background-color: var(--border-color); transform: scale(1.1); }
+        .header-btn:disabled { cursor: wait; }
+        .header-btn i.fa-spinner { animation: fa-spin 2s infinite linear; }
+        .header-btn .fa-star.favorited { color: var(--gold-color); }
+        
+        .question-text { font-size: 1.4rem; line-height: 1.8; font-weight: 700; flex-grow: 1; }
+        
+        .card-actions { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
+        .action-btn { font-family: inherit; font-size: 1.2rem; font-weight: 700; padding: 12px 0; width: 130px; border-radius: 15px; border: none; cursor: pointer; transition: all 0.2s ease-in-out; background: var(--card-bg); box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light); }
+        .action-btn:hover:not(:disabled) { transform: translateY(-2px); }
+        .action-btn:active:not(:disabled) { transform: scale(0.95); box-shadow: var(--neumorphism-shadow-inset); }
+        .action-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+        .result-container { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.6s ease-out; text-align: center; }
+        .question-card.revealed .result-container { max-height: 200px; opacity: 1; margin-top: 25px; }
+        .result-icon { font-size: 3rem; margin-bottom: 10px; }
+        .result-icon.correct { color: var(--correct-color); } .result-icon.incorrect { color: var(--incorrect-color); }
+        .correction-text { font-size: 1.2rem; font-weight: 700; }
+        .correction-text.correct { color: var(--correct-color); } .correction-text.incorrect { color: var(--incorrect-color); }
+
+        .simple-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.5s ease; z-index: 1001; }
+        .simple-modal.visible { opacity: 1; visibility: visible; }
+        .simple-modal .modal-content { background: var(--bg-color); padding: 30px; border-radius: 20px; text-align: right; width: 90%; max-width: 600px; box-shadow: var(--neumorphism-shadow); animation: zoomIn 0.5s ease; position: relative; max-height: 80vh; overflow-y: auto;}
+        .simple-modal .modal-content { scrollbar-width: none; -ms-overflow-style: none; }
+        .simple-modal .modal-content::-webkit-scrollbar { display: none; }
+
+        .simple-modal h2 { font-family: 'KFGQPC Uthman Taha Naskh', serif; font-size: 2.2rem; color: var(--primary-color); margin-bottom: 20px; font-weight: 700;}
+        .simple-modal p { font-size: 1.3rem; line-height: 2; margin-bottom: 15px; }
+        .simple-modal .modal-close-btn { position: absolute; top: 15px; left: 20px; background: none; border: none; font-size: 1.8rem; color: var(--text-color); cursor: pointer; transition: transform 0.2s; }
+        .simple-modal .modal-close-btn:hover { transform: scale(1.2); }
+        #favorites-list { list-style-type: none; padding-right: 20px; }
+        #favorites-list li { padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 1.2rem; }
+        #favorites-list li:last-child { border-bottom: none; }
+
+        .modal-buttons { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 20px; }
+        #result-export-menu {
+            position: absolute; bottom: 85px; left: 50%;
+            background: var(--card-bg); border-radius: 15px; box-shadow: var(--neumorphism-shadow);
+            padding: 10px; width: 280px; z-index: 1002;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            transform-origin: bottom center; transform: translateX(-50%) translateY(10px) scale(0.9);
+        }
+        #result-export-menu.visible { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0) scale(1); }
+        
+        #print-content { display: none; }
+        .pdf-export-prepare { display: block !important; position: absolute; left: -9999px; top: 0; background-color: #fff; color: #000; font-family: 'KFGQPC Uthman Taha Naskh', serif; width: 210mm; padding: 15mm; font-size: 12pt; }
+        .pdf-export-prepare h1 { font-size: 22pt; text-align: center; margin-bottom: 20px; color: #000; }
+        .pdf-export-prepare .result-summary { text-align: center; margin-bottom: 20px; font-size: 16pt; }
+        .pdf-export-prepare .hadith-section { margin-top: 30px; padding-top: 15px; border-top: 2px solid #ccc; }
+        .pdf-export-prepare .hadith-section p { font-size: 14pt; }
+        .pdf-export-prepare .hadith-section .print-source { font-size: 11pt; color: #555; text-align: left; }
+        .pdf-export-prepare div { page-break-inside: avoid; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        .pdf-export-prepare p { font-size: 14pt; line-height: 1.6; }
+        .pdf-export-prepare .print-answer, .pdf-export-prepare .print-source { color: #555; font-size: 11pt; }
+        .pdf-export-prepare .user-answer-correct { color: #00a99d; }
+        .pdf-export-prepare .user-answer-incorrect { color: #e74c3c; }
+
+        @media print {
+            body, #print-content { font-family: 'KFGQPC Uthman Taha Naskh', serif !important; }
+            body { background-color: #fff; color: #000; font-size: 12pt; padding: 10mm; }
+            .main-container, .quiz-setup, .stats-and-controls, .simple-modal, .main-header, .hadith-display, .card-actions, .header-btn, .result-container { display: none !important; }
+            #print-content { display: block !important; }
+            #print-content h1 { font-size: 22pt; text-align: center; margin-bottom: 20px; color: #000; }
+            #print-content .result-summary { text-align: center; margin-bottom: 20px; font-size: 16pt; }
+            #print-content .hadith-section { margin-top: 30px; padding-top: 15px; border-top: 2px solid #ccc; }
+            #print-content .hadith-section p { font-size: 14pt; }
+            #print-content .hadith-section .print-source { font-size: 11pt; color: #555; text-align: left; }
+            #print-content div { page-break-inside: avoid; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+            #print-content p { font-size: 14pt; line-height: 1.6; }
+            #print-content .print-answer, #print-content .print-source { color: #555; font-size: 11pt; }
+            #print-content .user-answer-correct { color: #00a99d; }
+            #print-content .user-answer-incorrect { color: #e74c3c; }
+        }
+        @media (max-width: 600px) { body { padding: 10px; } .main-header h1 { font-size: 2.5rem; } .card-actions { flex-direction: column; } .action-btn { width: 100%; } .stats-and-controls, .stats-and-controls:hover, .stats-and-controls.touch-active { transform: translateY(0); } .control-buttons-wrapper{opacity: 1;} .modal-buttons { flex-direction: column;} }
+    </style>
+</head>
+<body>
+
+    <div class="main-container" id="main-container">
+        
+        <div class="quiz-wrapper" id="quiz-wrapper">
+             <section class="stats-and-controls" id="stats-and-controls">
+                <div class="control-buttons-wrapper">
+                    <div class="control-buttons">
+                        <div class="control-menu-container">
+                            <button class="control-btn" id="font-size-btn" title="حَجْمُ الْخَطِّ"><i class="fa-solid fa-text-height"></i></button>
+                            <div id="font-size-menu" class="control-menu">
+                                <button class="settings-option" id="increase-font-btn"><i class="fa-solid fa-magnifying-glass-plus"></i> تَكْبِيرُ الْخَطِّ</button>
+                                <button class="settings-option" id="decrease-font-btn"><i class="fa-solid fa-magnifying-glass-minus"></i> تَصْغِيرُ الْخَطِّ</button>
+                            </div>
+                        </div>
+                        <button class="control-btn" id="show-all-btn" title="إِظْhَارُ كُلِّ الْإِجَابَاتِ"><i class="fa-solid fa-eye"></i></button>
+                        <button class="control-btn" id="hide-all-btn" title="إِخْفَاءُ كُلِّ الْإِجَابَاتِ" style="display: none;"><i class="fa-solid fa-eye-slash"></i></button>
+                        <button class="control-btn" id="reset-btn" title="اخْتِبَارٌ جَدِيدٌ"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+                        <div class="control-menu-container">
+                            <button class="control-btn" id="export-print-btn" title="طِبَاعَةٌ / تَصْدِيرٌ"><i class="fa-solid fa-share-square"></i></button>
+                            <div id="export-print-menu" class="control-menu">
+                                <button class="settings-option" id="print-questions-btn"><i class="fa-solid fa-print"></i> طِبَاعَةُ الْأَسْئِلَةِ</button>
+                                <button class="settings-option" id="print-answers-btn"><i class="fa-solid fa-paste"></i> طِبَاعَةُ الْأَجْوِبَةِ</button>
+                                <hr>
+                                <button class="settings-option" id="export-pdf-questions-btn"><i class="fa-solid fa-file-pdf"></i> تَصْدِيرُ الْأَسْئِلَةِ (PDF)</button>
+                                <button class="settings-option" id="export-pdf-answers-btn"><i class="fa-solid fa-file-invoice"></i> تَصْدِيرُ الْأَجْوِبَةِ (PDF)</button>
+                                <hr>
+                                <button class="settings-option" id="export-txt-questions-btn"><i class="fa-solid fa-file-lines"></i> تَصْدِيرُ الْأَسْئِلَةِ (TXT)</button>
+                                <button class="settings-option" id="export-txt-answers-btn"><i class="fa-solid fa-file-lines"></i> تَصْدِيرُ الْأَجْوِبَةِ (TXT)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="visible-bar">
+                    <div class="stat-item"><i class="fa-solid fa-star"></i><span id="score-text">النَّتِيجَةُ: ٠ / ٠</span></div>
+                    <div class="progress-container"><div class="progress-bar" id="progress-bar-top"></div></div>
+                    <div class="stat-item global-timer" id="global-timer" style="display: none;">
+                        <i class="fa-solid fa-clock"></i><span id="global-timer-display">--:--</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+       
+        <header class="main-header"><h1>اخْتِبَارُ الدَّرْسِ الْسَّابِعِ مِنْ شَرْحِ الْقَطْرِ</h1></header>
+
+        <section class="quiz-setup" id="quiz-setup">
+            <div class="hadith-display" id="hadith-display-start"></div>
+            <div class="slider-container">
+                <label for="question-count-slider">حَدِّدْ عَدَدَ الْأَسْئِلَةِ: <span id="question-count-value">15</span></label>
+                <input type="range" id="question-count-slider" min="1" max="30" value="15">
+            </div>
+            
+            <div class="setup-options-container">
+                <button id="timer-options-btn" title="خِيَارَاتُ الْمُؤَقِّتِ">
+                    <i class="fa-solid fa-stopwatch"></i>
+                    <span>الْمُؤَقِّتُ: <span id="current-timer-mode"></span></span>
+                </button>
+                <div id="timer-options-menu">
+                    <button class="settings-option" data-mode="none"><i class="fa-solid fa-ban"></i> إِيقَاف</button>
+                    <button class="settings-option" data-mode="perQuestion"><i class="fa-solid fa-stopwatch-20"></i> مُؤَقِّتٌ لِكُلِّ سُؤَالٍ (٣٠ ثَانِيَةً)</button>
+                    <button class="settings-option" data-mode="challenge"><i class="fa-solid fa-bolt"></i> وَضْعُ التَّحَدِّي (دَقِيقَتَانِ)</button>
+                </div>
+            </div>
+
+            <div class="setup-buttons">
+                <button id="start-btn" class="setup-btn" title="اِبْدَأِ الِاخْتِبَارَ"><i class="fa-solid fa-play"></i></button>
+                <button id="settings-btn" class="setup-btn" title="الْإِعْدَادَاتُ"><i class="fa-solid fa-gear"></i></button>
+                <div id="settings-menu">
+                    <button class="settings-option" id="view-favorites-btn"><i class="fa-solid fa-star"></i> عَرْضُ الْأَسْئِلَةِ الْمُفَضَّلَةِ</button>
+                    <hr>
+                    <button class="settings-option" id="print-hadiths-menu"><i class="fa-solid fa-print"></i> طِبَاعَةُ أَحَادِيثِ الْعِلْمِ</button>
+                    <button class="settings-option" id="export-pdf-hadiths-menu"><i class="fa-solid fa-file-pdf"></i> تَصْدِيرُ الْأَحَادِيثِ (PDF)</button>
+                    <hr>
+                    <button class="settings-option" id="print-all-questions-menu"><i class="fa-solid fa-print"></i> طِبَاعَةُ كُلِّ الْأَسْئِلَةِ</button>
+                    <button class="settings-option" id="print-all-answers-menu"><i class="fa-solid fa-paste"></i> طِبَاعَةُ الْأَسْئِلَةِ وَالْأَجْوِبَةِ</button>
+                    <hr>
+                    <button class="settings-option" id="export-pdf-all-questions-menu"><i class="fa-solid fa-file-pdf"></i> تَصْدِيرُ كُلِّ الْأَسْئِلَةِ (PDF)</button>
+                    <button class="settings-option" id="export-pdf-all-answers-menu"><i class="fa-solid fa-file-invoice"></i> تَصْدِيرُ الْأَسْئِلَةِ وَالْأَجْوِبَةِ (PDF)</button>
+                    <hr>
+                    <button class="settings-option" id="export-txt-hadiths-menu"><i class="fa-solid fa-file-lines"></i> تَصْدِيرُ الْأَحَادِيثِ (TXT)</button>
+                    <button class="settings-option" id="export-txt-all-questions-menu"><i class="fa-solid fa-file-lines"></i> تَصْدِيرُ كُلِّ الْأَسْئِلَةِ (TXT)</button>
+                    <button class="settings-option" id="export-txt-all-answers-menu"><i class="fa-solid fa-file-lines"></i> تَصْدِيرُ الْأَجْوِبَةِ (TXT)</button>
+                </div>
+            </div>
+        </section>
+
+        <main id="quiz-container"></main>
+        
+        <div id="final-score-modal" class="simple-modal">
+            <div class="modal-content">
+                <div style="text-align: center;">
+                    <i class="fa-solid fa-award modal-icon"></i>
+                    <h2>أَحْسَنْتَ عَمَلًا!</h2>
+                    <p>نَتِيجَتُكَ النِّهَائِيَّةُ هِيَ:</p>
+                    <p id="final-score-text"></p>
+                    <p id="final-message"></p>
+                </div>
+                <div class="hadith-display" id="hadith-display-end" style="margin-top: 20px;"></div>
+
+                <div class="modal-buttons">
+                    <button class="control-btn" id="play-again-btn" style="padding: 12px 30px; font-size: 1rem;"><i class="fa-solid fa-arrow-rotate-left"></i> الْعَبْ مَرَّةً أُخْرَى</button>
+                    <button class="control-btn" id="export-result-btn" style="padding: 12px 30px; font-size: 1rem;"><i class="fa-solid fa-receipt"></i> تَصْدِيرُ النَّتِيجَةِ</button>
+                </div>
+                <div id="result-export-menu" class="control-menu">
+                    <button class="settings-option" id="print-result-btn"><i class="fa-solid fa-print"></i> طِبَاعَةُ النَّتِيجَةِ</button>
+                    <button class="settings-option" id="export-pdf-result-btn"><i class="fa-solid fa-file-pdf"></i> تَصْدِيرُ النَّتِيجَةِ (PDF)</button>
+                    <button class="settings-option" id="export-txt-result-btn"><i class="fa-solid fa-file-lines"></i> تَصْدِيرُ النَّتِيجَةِ (TXT)</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="explanation-modal" class="simple-modal">
+            <div class="modal-content">
+                 <button class="modal-close-btn" onclick="this.parentElement.parentElement.classList.remove('visible')">&times;</button>
+                 <h2><i class="fa-solid fa-book-open"></i> شَرْحٌ مُفَصَّلٌ</h2>
+                 <p id="explanation-text"></p>
+            </div>
+        </div>
+        <div id="favorites-modal" class="simple-modal">
+             <div class="modal-content">
+                 <button class="modal-close-btn" onclick="this.parentElement.parentElement.classList.remove('visible')">&times;</button>
+                 <h2><i class="fa-solid fa-star"></i> الْأَسْئِلَةُ الْمُفَضَّلَةُ</h2>
+                 <ul id="favorites-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="print-content" style="display: none;"></div>
+    
+<script>
+// ==================================================================================
+// ==  القسم الأول: بيانات الاختبار (هذا هو الجزء الذي يتم تعديله لكل درس جديد)  ==
+// ==================================================================================
+const fullQuizData = [
+    { statement: 'عَلَامَةُ فِعْلِ الْأَمْرِ هِيَ الدَّلَالَةُ عَلَى الطَّلَبِ وَقَبُولُ يَاءِ الْمُخَاطَبَةِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! لَا بُدَّ مِنِ اجْتِمَاعِ الْعَلَامَتَيْنِ لِلتَّفْرِيقِ بَيْنَهُ وَبَيْنَ اسْمِ الْفِعْلِ.', explanation: 'لا يكفي أن يدل على الطلب (لأن اسم الفعل يدل على الطلب)، بل يجب أن يقبل ياء المخاطبة أيضاً ليتميز عن اسم فعل الأمر، ويجب أن يدل على الطلب ليتميز عن الفعل المضارع الذي يقبل ياء المخاطبة.' },
+    { statement: 'كَلِمَةُ "حَيَّ" تُعْتَبَرُ فِعْلَ أَمْرٍ لِأَنَّهَا تَدُلُّ عَلَى الطَّلَبِ.', answer: 'incorrect', correction: 'هِيَ اسْمُ فِعْلِ أَمْرٍ، لِأَنَّهَا لَا تَقْبَلُ يَاءَ الْمُخَاطَبَةِ (لَا يُقَالُ: حَيِّي).', explanation: 'اسم فعل الأمر يدل على الطلب مثل فعل الأمر، ولكنه لا يقبل علامات الأفعال مثل ياء المخاطبة، وهذا هو الفارق بينهما.' },
+    { statement: 'الْقَاعِدَةُ الْعَامَّةُ هِيَ أَنَّ فِعْلَ الْأَمْرِ يُبْنَى عَلَى مَا يُجْزَمُ بِهِ مُضَارِعُهُ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! فَهِيَ تَشْمَلُ الْبِنَاءَ عَلَى السُّكُونِ وَحَذْفِ النُّونِ وَحَذْفِ حَرْفِ الْعِلَّةِ.', explanation: 'إذا كان المضارع يُجزم بالسكون، فالأمر يُبنى على السكون. وإذا كان يُجزم بحذف حرف العلة، فالأمر يُبنى على حذف حرف العلة. وإذا كان يُجزم بحذف النون، فالأمر يُبنى على حذف النون.' },
+    { statement: 'الْفِعْلُ "اُكْتُبَنَّ" مَبْنِيٌّ عَلَى الْفَتْحِ لِاتِّصَالِهِ بِنُونِ التَّوْكِيدِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! هَذِهِ إِحْدَى حَالَاتِ بِنَاءِ فِعْلِ الْأَمْرِ.', explanation: 'اتصال نون التوكيد المباشر بفعل الأمر يجعله مبنياً على الفتح، وهي الحالة الرابعة من حالات بنائه.' },
+    { statement: 'فِي لُغَةِ بَنِي تَمِيمٍ، تُعْتَبَرُ "هَلُمَّ" فِعْلَ أَمْرٍ لِقَبُولِهَا الضَّمَائِرَ مِثْلَ "هَلُمُّوا".', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! بِخِلَافِ لُغَةِ أَهْلِ الْحِجَازِ حَيْثُ تَلْزَمُ حَالَةً وَاحِدَةً.', explanation: 'اتصال الضمائر بها في لغة بني تميم هو ما يجعلها فعل أمر عندهم، خلافاً للحجازيين الذين يعتبرونها اسم فعل.' },
+    { statement: 'الْفِعْلَانِ "هَاتِ" وَ"تَعَالَ" هُمَا اسْمَا فِعْلِ أَمْرٍ عَلَى الْقَوْلِ الرَّاجِحِ.', answer: 'incorrect', correction: 'الصَّوَابُ أَنَّهُمَا فِعْلَا أَمْرٍ لِقَبُولِهِمَا يَاءَ الْمُخَاطَبَةِ (هَاتِي، تَعَالَيْ).', explanation: 'بما أنهما استوفيا شرطي فعل الأمر (الدلالة على الطلب وقبول ياء المخاطبة)، فالصحيح أنهما فعلان لا اسما فعل.' },
+    { statement: 'يُعْرَفُ الْفِعْلُ الْمُضَارِعُ بِدُخُولِ حُرُوفِ الْجَوَازِمِ عَلَيْهِ مِثْلِ "لَمْ".', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَهَذِهِ مِنْ أَوْضَحِ عَلَامَاتِهِ.', explanation: 'دخول أداة جزم مثل "لم" أو أداة نصب مثل "لن" يختص بالفعل المضارع دون غيره من الأفعال.' },
+    { statement: 'يُفْتَحُ أَوَّلُ الْفِعْلِ الْمُضَارِعِ إِذَا كَانَ مَاضِيهِ رُبَاعِيًّا.', answer: 'incorrect', correction: 'يُضَمُّ أَوَّلُهُ إِذَا كَانَ مَاضِيهِ رُبَاعِيًّا، وَيُفْتَحُ فِيمَا عَدَا ذَلِكَ (الثُّلَاثِيِّ وَالْخُمَاسِيِّ وَالسُّدَاسِيِّ).', explanation: 'مثل: دَحْرَجَ (رباعي) -> يُدَحْرِجُ (مضموم الأول). أما فَتَحَ (ثلاثي) -> يَفْتَحُ (مفتوح الأول).' },
+    { statement: 'الْفِعْلُ الْمُضَارِعُ يُبْنَى عَلَى السُّكُونِ إِذَا اتَّصَلَتْ بِهِ نُونُ النِّسْوَةِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! مِثْلُ: "الْأُمَّهَاتُ يُرَبِّينَ أَوْلَادَهُنَّ".', explanation: 'يبنى الفعل المضارع في حالتين فقط: على السكون مع نون النسوة، وعلى الفتح مع نون التوكيد المباشرة.' },
+    { statement: 'وَزْنُ "يَدْعُونَ" فِي "النِّسَاءُ يَدْعُونَ" هُوَ "يَفْعُلْنَ".', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! لِأَنَّ الْوَاوَ أَصْلِيَّةٌ (لَامُ الْفِعْلِ).', explanation: 'الفعل "يدعو" أُسند إلى نون النسوة مباشرة، فالواو أصلية لم تُحذف، والوزن هو "يَفْعُلْنَ". والفعل هنا مبني على السكون.' },
+    { statement: 'الْوَاوُ فِي "الرِّجَالُ يَدْعُونَ" هِيَ لَامُ الْفِعْلِ.', answer: 'incorrect', correction: 'الْوَاوُ هِيَ ضَمِيرُ وَاوِ الْجَمَاعَةِ، أَمَّا لَامُ الْفِعْلِ فَقَدْ حُذِفَتْ لِالْتِقَاءِ السَّاكِنَيْنِ.', explanation: 'أصل الفعل "يَدْعُو" + "ون"، التقى ساكنان (واو الفعل وواو الجماعة)، فحُذفت الأولى (لام الفعل)، فصار الوزن "يَفْعُونَ".' },
+    { statement: 'لَا يُمْكِنُ اجْتِمَاعُ نُونِ النِّسْوَةِ مَعَ ضَمَائِرِ الْأَفْعَالِ الْخَمْسَةِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! لِأَنَّ كُلًّا مِنْهُمَا ضَمِيرُ رَفْعٍ، وَلَا يَجْتَمِعُ ضَمِيرَا رَفْعٍ لِفِعْلٍ وَاحِدٍ.', explanation: 'نون النسوة ضمير فاعل، وكذلك ألف الاثنين وواو الجماعة وياء المخاطبة، ولا يمكن أن يكون للفعل فاعلان في نفس الوقت.' },
+    { statement: 'عَلَامَةُ الْحَرْفِ هِيَ أَنَّهُ لَا يَقْبَلُ شَيْئًا مِنْ عَلَامَاتِ الِاسْمِ وَلَا الْفِعْلِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! فَعَلَامَتُهُ عَدَمِيَّةٌ.', explanation: 'للتفريق بين أقسام الكلمة، نختبر الكلمة بعلامات الاسم فإن لم تقبلها، نختبرها بعلامات الفعل، فإن لم تقبلها، فهي حرف.' },
+    { statement: 'الْحُرُوفُ تَنْقَسِمُ إِلَى حُرُوفٍ مُخْتَصَّةٍ بِالْأَسْمَاءِ، وَحُرُوفٍ مُخْتَصَّةٍ بِالْأَفْعَالِ.', answer: 'incorrect', correction: 'هَذَا تَقْسِيمٌ نَاقِصٌ، فَيُوجَدُ قِسْمٌ ثَالِثٌ وَهُوَ الْحُرُوفُ الْمُشْتَرَكَةُ بَيْنَهُمَا.', explanation: 'الحروف ثلاثة أقسام: مختصة بالأسماء (كحروف الجر)، ومختصة بالأفعال (كحروف النصب)، ومشتركة (كهل الاستفهامية).' },
+    { statement: 'الْأَصْلُ فِي الْحَرْفِ الْمُشْتَرَكِ أَنْ يَكُونَ عَامِلًا.', answer: 'incorrect', correction: 'الْأَصْلُ فِي الْحَرْفِ الْمُشْتَرَكِ أَنْ يَكُونَ مُهْمَلًا (غَيْرَ عَامِلٍ).', explanation: 'بما أن الحرف المشترك لا يختص بنوع من الكلم، فالأصل فيه عدم العمل، بخلاف الحرف المختص فالأصل فيه العمل (كالجر والنصب).' },
+    { statement: 'الضَّمِيرُ فِي "بِهِ" مِنْ قَوْلِهِ تَعَالَى "مَهْمَا تَأْتِنَا بِهِ" دَلِيلٌ عَلَى اسْمِيَّةِ "مَهْمَا".', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! لِأَنَّ الضَّمَائِرَ لَا تَعُودُ إِلَّا عَلَى الْأَسْمَاءِ.', explanation: 'عود الضمير على كلمة ما هو دليل قاطع على اسمية تلك الكلمة. هذا هو الدليل الأقوى الذي استخدمه الجمهور لإثبات اسمية "مهما".' },
+    { statement: 'اسْتَدَلَّ السُّهَيْلِيُّ عَلَى حَرْفِيَّةِ "مَهْمَا" بِخُلُوِّ جُمْلَةِ الشَّرْطِ مِنَ الرَّابِطِ فِي بَيْتِ زُهَيْرٍ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! لَكِنْ رُدَّ عَلَيْهِ بِأَنَّ الرَّابِطَ ضَمِيرٌ مُسْتَتِرٌ.', explanation: 'اعتقد السهيلي أن "خليقة" هي اسم "تكن"، وبالتالي لا يوجد ضمير يعود على "مهما"، فاستنتج أنها حرف. لكن الرد كان أن اسم "تكن" ضمير مستتر يعود على "مهما".' },
+    { statement: 'الْقَوْلُ الرَّاجِحُ الَّذِي اسْتَقَرَّ عَلَيْهِ النُّحَاةُ فِي "إِذْ مَا" أَنَّهَا حَرْفُ شَرْطٍ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَهُوَ قَوْلُ سِيبَوَيْهِ وَاخْتِيَارُ ابْنِ مَالِكٍ.', explanation: 'على الرغم من الخلاف القديم، استقر رأي المحققين من النحاة على أن "إذ ما" حرف شرط جازم بمنزلة "إنْ".' },
+    { statement: 'مِنْ عَلَامَاتِ الِاسْمِ عَوْدُ الضَّمِيرِ عَلَيْهِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَهِيَ عَلَامَةٌ مَعْنَوِيَّةٌ قَوِيَّةٌ.', explanation: 'بالإضافة إلى العلامات اللفظية كالجر والتنوين والنداء وأل، يُعتبر عود الضمير على الكلمة من أقوى الأدلة على أنها اسم.' },
+    { statement: 'فِي قَوْلِهِ تَعَالَى "وَدُّوا مَا عَنِتُّمْ"، نَوْعُ "مَا" هُنَا شَرْطِيَّةٌ.', answer: 'incorrect', correction: 'نَوْعُهَا مَصْدَرِيَّةٌ، وَالتَّقْدِيرُ: وَدُّوا عَنَتَكُمْ.', explanation: '"ما" المصدرية هي التي تؤول مع الفعل بعدها بمصدر صريح، وهذا المصدر له موقع من الإعراب (هنا: مفعول به).' },
+    { statement: 'يُبْنَى الْفِعْلُ الْمُضَارِعُ عَلَى الْفَتْحِ إِذَا سُبِقَ بِأَدَاةِ نَصْبٍ.', answer: 'incorrect', correction: 'يَكُونُ مَنْصُوبًا، وَلَيْسَ مَبْنِيًّا. الْبِنَاءُ عَلَى الْفَتْحِ يَكُونُ عِنْدَ اتِّصَالِهِ بِنُونِ التَّوْكِيدِ.', explanation: 'هناك فرق بين الإعراب والبناء. النصب علامة إعراب تتغير بتغير العامل، أما البناء فهو لزوم آخر الكلمة حالة واحدة.' },
+    { statement: 'الْفِعْلُ "لَتُبْلَوُنَّ" مُعْرَبٌ لِأَنَّهُ مِنَ الْأَفْعَالِ الْخَمْسَةِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! الْوَاوُ الْمَوْجُودَةُ هِيَ وَاوُ الْجَمَاعَةِ، وَقَدْ فُصِلَ بِهَا بَيْنَ الْفِعْلِ وَنُونِ التَّوْكِيدِ.', explanation: 'بما أن اتصال نون التوكيد بالفعل ليس مباشرًا، فإن الفعل يظل معربًا. وعلامة إعرابه هنا هي حذف النون (لأنه جواب قسم).'},
+    { statement: 'حُذِفَتْ وَاوُ الْجَمَاعَةِ فِي "لَا يَصُدُّنَّكَ" لِالْتِقَاءِ السَّاكِنَيْنِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَبَقِيَتِ الضَّمَّةُ قَبْلَهَا دَلِيلًا عَلَيْهَا.', explanation: 'التقاء واو الجماعة الساكنة مع النون الأولى الساكنة من نون التوكيد المشددة أدى إلى حذف الواو تخفيفًا.'},
+    { statement: 'الْأَفْعَالُ الْخَمْسَةُ هِيَ كُلُّ فِعْلٍ مُضَارِعٍ اتَّصَلَ بِهِ أَلِفُ الِاثْنَيْنِ أَوْ وَاوُ الْجَمَاعَةِ أَوْ نُونُ النِّسْوَةِ.', answer: 'incorrect', correction: 'اتَّصَلَ بِهِ أَلِفُ الِاثْنَيْنِ أَوْ وَاوُ الْجَمَاعَةِ أَوْ يَاءُ الْمُخَاطَبَةِ.', explanation: 'نون النسوة تبني الفعل المضارع على السكون وتخرجه من الأفعال الخمسة المعربة.'},
+    { statement: 'مِنَ الْحُرُوفِ الْمَصْدَرِيَّةِ "أَنْ" وَ"لَوْ".', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَكَذَلِكَ "أَنَّ" وَ"كَيْ" وَ"مَا".', explanation: 'الحروف المصدرية خمسة، وهي التي تؤول مع ما بعدها بمصدر صريح له محل من الإعراب.'},
+    { statement: 'الْحُرُوفُ كُلُّهَا مَبْنِيَّةٌ وَلَا مَحَلَّ لَهَا مِنَ الْإِعْرَابِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! هَذِهِ قَاعِدَةٌ عَامَّةٌ لِجَمِيعِ الْحُرُوفِ.', explanation: 'بعكس الأسماء والأفعال التي قد يكون لها محل من الإعراب، الحروف دائمًا مبنية ولا محل لها من الإعراب، فهي مجرد روابط.'},
+    { statement: 'الْفِعْلُ "تَكُنْ" فِي بَيْتِ زُهَيْرٍ "وَمَهْمَا تَكُنْ" مَجْزُومٌ لِأَنَّهُ فِعْلُ الشَّرْطِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! "مَهْمَا" أَدَاةُ شَرْطٍ جَازِمَةٌ.', explanation: 'أدوات الشرط الجازمة تجزم فعلين: فعل الشرط ("تكن" هنا)، وجواب الشرط ("تُعْلَمِ" في آخر البيت).'},
+    { statement: 'الْفِعْلُ "تَكُنْ" فِي بَيْتِ زُهَيْرٍ "وَمَهْمَا تَكُنْ" مَجْزُومٌ لِأَنَّهُ فِعْلُ الشَّرْطِ.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! "مَهْمَا" أَدَاةُ شَرْطٍ جَازِمَةٌ.', explanation: 'أدوات الشرط الجازمة تجزم فعلين: فعل الشرط ("تكن" هنا)، وجواب الشرط ("تُعْلَمِ" في آخر البيت).'},
+    { statement: 'عِنْدَ إِعْرَابِ "يَسُرُّ الْمَرْءَ ذَهَابُ اللَّيَالِي"، تُعْرَبُ "ذَهَابُ" فَاعِلًا.', answer: 'correct', correction: 'إِجَابَةٌ صَحِيحَةٌ! وَهُوَ الْمَصْدَرُ الصَّرِيحُ الْمُؤَوَّلُ مِنْ "مَا ذَهَبَ".', explanation: 'في جملة "يسر المرء ما ذهب الليالي"، "ما" والفعل "ذهب" يؤولان بمصدر هو "ذهاب"، وهذا المصدر هو فاعل الفعل "يسر".'},
+    { statement: 'تَغَيُّرُ زَمَنِ الْكَلِمَةِ (مِنَ الْمَاضِي إِلَى الْمُسْتَقْبَلِ) دَلِيلٌ قَاطِعٌ عَلَى تَغَيُّرِ نَوْعِهَا (مِنِ اسْمٍ إِلَى حَرْفٍ).', answer: 'incorrect', correction: 'هَذَا لَيْسَ دَلِيلًا قَاطِعًا، فَالْفِعْلُ الْمُضَارِعُ يَتَغَيَّرُ زَمَنُهُ بِدُخُولِ "لَمْ" وَيَبْقَى فِعْلًا.', explanation: 'تغير الدلالة الزمنية لا يستلزم بالضرورة تغير نوع الكلمة من اسم إلى فعل أو حرف. فقد تتغير دلالة الكلمة مع بقائها ضمن نفس القسم، كما هو الحال مع الفعل المضارع عند دخول "لم" عليه.'}
+];
+
+// ==================================================================================
+// == القسم الثاني: مكتبة الأحاديث (هذا الجزء ثابت ولا يجب تغييره) ==
+// ==================================================================================
+const hadithLibrary = [
+    { text: '«مَنْ سَلَكَ طَرِيقًا يَطْلُبُ فِيهِ عِلْمًا، سَلَكَ اللَّهُ بِهِ طَرِيقًا مِنْ طُرُقِ الْجَنَّةِ»', source: 'سُنَنُ أَبِي دَاوُدَ، رَقْمُ ٣٦٤١ (صَحَّحَهُ الْأَلْبَانِيُّ)' }, { text: '«مَنْ يُرِدِ اللَّهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ»', source: 'صَحِيحُ الْبُخَارِيِّ، رَقْمُ ٧١' }, { text: '«إِنَّ الْعُلَمَاءَ وَرَثَةُ الْأَنْبِيَاءِ، وَإِنَّ الْأَنْبِيَاءَ لَمْ يُوَرِّثُوا دِينَارًا وَلَا dِرْهَمًا، وَرَّثُوا الْعِلْمَ، فَمَنْ أَخَذَهُ أَخَذَ بِحَظٍّ وَافِرٍ»', source: 'سُنَنُ أَبِي دَاوُدَ، رَقْمُ ٣٦٤١ (صَحَّحَهُ الْأَلْبَانِيُّ)' }, { text: '«إِذَا مَاتَ الْإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ إِلَّا مِنْ ثَلَاثَةٍ: صَدَقَةٍ جَارِيَةٍ، أَوْ عِلْمٍ يُنْتَفَعُ بِهِ، أَوْ وَلَدٍ صَالِحٍ يَدْعُو لَهُ»', source: 'صَحِيحُ مُسْلِمٍ، رَقْمُ ١٦٣١' }, { text: '«خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ»', source: 'صَحِيحُ الْبُخَارِيِّ، رَقْمُ ٥٠٢٧' }
+];
+
+// ==================================================================================
+// == القسم الثالث: المنطق البرمجي للاختبار (هذا الجزء لا يحتاج إلى أي تعديل) ==
+// ==================================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const quizSetup = document.getElementById('quiz-setup'), quizWrapper = document.getElementById('quiz-wrapper');
+    const startBtn = document.getElementById('start-btn'), slider = document.getElementById('question-count-slider'), sliderValue = document.getElementById('question-count-value');
+    const quizContainer = document.getElementById('quiz-container'), scoreText = document.getElementById('score-text');
+    const progressBarTop = document.getElementById('progress-bar-top');
+    const resetBtn = document.getElementById('reset-btn');
+    const modal = document.getElementById('final-score-modal'), playAgainBtn = document.getElementById('play-again-btn');
+    const hadithStart = document.getElementById('hadith-display-start'), hadithEnd = document.getElementById('hadith-display-end');
+    const timerOptionsBtn = document.getElementById('timer-options-btn');
+    const timerOptionsMenu = document.getElementById('timer-options-menu');
+    const currentTimerModeSpan = document.getElementById('current-timer-mode');
+    const settingsBtn = document.getElementById('settings-btn'), settingsMenu = document.getElementById('settings-menu');
+    const printContent = document.getElementById('print-content');
+    const fontSizeBtn = document.getElementById('font-size-btn'), fontSizeMenu = document.getElementById('font-size-menu');
+    const decreaseFontBtn = document.getElementById('decrease-font-btn'), increaseFontBtn = document.getElementById('increase-font-btn');
+    const showAllBtn = document.getElementById('show-all-btn'), hideAllBtn = document.getElementById('hide-all-btn');
+    const globalTimerContainer = document.getElementById('global-timer'), globalTimerDisplay = document.getElementById('global-timer-display');
+    const exportPrintBtn = document.getElementById('export-print-btn'), exportPrintMenu = document.getElementById('export-print-menu');
+    const exportResultBtn = document.getElementById('export-result-btn'), resultExportMenu = document.getElementById('result-export-menu');
+    const explanationModal = document.getElementById('explanation-modal'), explanationText = document.getElementById('explanation-text');
+    const favoritesModal = document.getElementById('favorites-modal'), favoritesList = document.getElementById('favorites-list'), viewFavoritesBtn = document.getElementById('view-favorites-btn');
+
+    let score = 0, answeredCount = 0, totalQuestions = 0, currentQuizData = [];
+    let timerMode = 'none';
+    let timerInterval = null, challengeTimerInterval = null, currentTimerQuestionIndex = 0;
+    const TIME_PER_QUESTION = 30, CHALLENGE_TIME = 120;
+
+    const getFavorites = () => JSON.parse(localStorage.getItem('favoriteQuestions') || '[]');
+    const isFavorite = (statement) => getFavorites().includes(statement);
+    const toggleFavorite = (statement) => {
+        let favorites = getFavorites();
+        if (favorites.includes(statement)) {
+            favorites = favorites.filter(fav => fav !== statement);
+        } else {
+            favorites.push(statement);
+        }
+        localStorage.setItem('favoriteQuestions', JSON.stringify(favorites));
+    };
+
+    function displayRandomHadith(container) {
+        const randomIndex = Math.floor(Math.random() * hadithLibrary.length);
+        container.innerHTML = `<i class="fa-solid fa-quote-right"></i><p class="hadith-text">${hadithLibrary[randomIndex].text}</p><p class="hadith-source">${hadithLibrary[randomIndex].source}</p>`;
+    }
+
+    function startQuiz() {
+        clearInterval(timerInterval);
+        clearInterval(challengeTimerInterval);
+        speechSynthesis.cancel();
+        
+        totalQuestions = parseInt(slider.value, 10);
+        currentQuizData = fullQuizData.sort(() => 0.5 - Math.random()).slice(0, totalQuestions).map(q => ({...q, userChoice: null}));
+        score = 0; answeredCount = 0;
+        
+        quizSetup.style.display = 'none'; 
+        quizWrapper.style.display = 'block';
+        document.getElementById('main-container').classList.add('quiz-active');
+        buildQuiz(currentQuizData);
+        
+        globalTimerContainer.style.display = 'none';
+        if (timerMode === 'perQuestion') {
+            globalTimerContainer.style.display = 'flex';
+            startTimerForQuestion(0);
+        } else if (timerMode === 'challenge') {
+            globalTimerContainer.style.display = 'flex';
+            startChallengeTimer();
+        }
+    }
+    
+    function buildQuiz(questions) {
+        quizContainer.innerHTML = ''; 
+        updateStats();
+        questions.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card'; 
+            card.style.animationDelay = `${index * 0.07}s`; 
+            card.dataset.correctAnswer = item.answer;
+            card.dataset.statement = item.statement;
+            
+            const isFav = isFavorite(item.statement);
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="question-number">${index + 1}</div>
+                    <p class="question-text">${item.statement}</p>
+                    <button class="header-btn read-aloud-btn" title="قِرَاءَةُ السُّؤَالِ"><i class="fa-solid fa-volume-high"></i></button>
+                    <button class="header-btn explanation-btn" title="شَرْحٌ مُفَصَّلٌ" style="display: none;"><i class="fa-solid fa-book-open"></i></button>
+                    <button class="header-btn copy-question-btn" title="نَسْخُ السُّؤَالِ"><i class="fa-solid fa-copy"></i></button>
+                    <button class="header-btn copy-answer-btn" title="نَسْخُ السُّؤَالِ مَعَ الْجَوَابِ" style="display: none;"><i class="fa-solid fa-paste"></i></button>
+                    <button class="header-btn favorite-btn" title="مُرَاجَعَةُ السُّؤَالِ"><i class="fa-${isFav ? 'solid' : 'regular'} fa-star ${isFav ? 'favorited' : ''}"></i></button>
+                </div>
+                <div class="card-actions">
+                    <button class="action-btn correct" data-choice="correct">صَحٌّ</button>
+                    <button class="action-btn incorrect" data-choice="incorrect">خَطَأٌ</button>
+                </div>
+                <div class="result-container"></div>`;
+            quizContainer.appendChild(card);
+        });
+    }
+
+    function startTimerForQuestion(index) {
+        clearInterval(timerInterval);
+        if (index >= totalQuestions) return;
+        currentTimerQuestionIndex = index;
+        let timeLeft = TIME_PER_QUESTION;
+        globalTimerDisplay.textContent = timeLeft;
+        globalTimerContainer.classList.remove('low-time');
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            globalTimerDisplay.textContent = timeLeft;
+            if (timeLeft <= 10) globalTimerContainer.classList.add('low-time');
+            if (timeLeft <= 0) handleTimeout();
+        }, 1000);
+    }
+    
+    function startChallengeTimer() {
+        let timeLeft = CHALLENGE_TIME;
+        const updateDisplay = () => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            globalTimerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft <= 20) globalTimerContainer.classList.add('low-time');
+            else globalTimerContainer.classList.remove('low-time');
+        };
+
+        updateDisplay();
+        challengeTimerInterval = setInterval(() => {
+            timeLeft--;
+            updateDisplay();
+            if (timeLeft <= 0) {
+                endChallenge();
+            }
+        }, 1000);
+    }
+
+    function endChallenge() {
+        clearInterval(challengeTimerInterval);
+        quizContainer.querySelectorAll('.question-card:not(.revealed) .action-btn').forEach(btn => btn.disabled = true);
+        showFinalScore();
+    }
+
+    function handleTimeout() {
+        clearInterval(timerInterval);
+        const card = quizContainer.children[currentTimerQuestionIndex];
+        if (card && !card.classList.contains('revealed')) {
+            processAnswer(card, null);
+        }
+    }
+
+    function copyToClipboard(text, button) {
+        navigator.clipboard.writeText(text).then(() => {
+            const icon = button.querySelector('i');
+            const originalIconClass = icon.className;
+            icon.className = 'fa-solid fa-check';
+            button.disabled = true;
+            setTimeout(() => {
+                icon.className = originalIconClass;
+                button.disabled = false;
+            }, 1500);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('عذرًا، لم يتم النسخ. قد لا يدعم متصفحك هذه الميزة.');
+        });
+    }
+    
+    function handleQuizInteraction(e) {
+        const target = e.target;
+        const btn = target.closest('button');
+        if (!btn) return;
+
+        const card = btn.closest('.question-card');
+        if (!card) return;
+
+        if (btn.classList.contains('action-btn')) {
+            if (card.classList.contains('revealed')) return;
+            clearInterval(timerInterval);
+            processAnswer(card, btn.dataset.choice);
+        } else if (btn.classList.contains('read-aloud-btn')) {
+            const questionText = card.querySelector('.question-text').textContent;
+            readAloud(questionText);
+        } else if (btn.classList.contains('favorite-btn')) {
+            const statement = card.dataset.statement;
+            toggleFavorite(statement);
+            const icon = btn.querySelector('i');
+            icon.classList.toggle('fa-regular');
+            icon.classList.toggle('fa-solid');
+            icon.classList.toggle('favorited');
+        } else if (btn.classList.contains('explanation-btn')) {
+            const index = Array.from(quizContainer.children).indexOf(card);
+            const explanation = currentQuizData[index].explanation;
+            if(explanation) {
+                explanationText.textContent = explanation;
+                explanationModal.classList.add('visible');
+            }
+        } else if (btn.classList.contains('copy-question-btn')) {
+            const statement = card.dataset.statement;
+            copyToClipboard(statement, btn);
+        } else if (btn.classList.contains('copy-answer-btn')) {
+            const index = Array.from(quizContainer.children).indexOf(card);
+            const statement = currentQuizData[index].statement;
+            const correction = currentQuizData[index].correction;
+            const fullText = `السُّؤَالُ: ${statement}\n\nالْجَوَابُ: ${correction}`;
+            copyToClipboard(fullText, btn);
+        }
+    }
+
+    function readAloud(text) {
+        if (speechSynthesis.speaking) {
+            speechSynthesis.cancel();
+        }
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ar-SA';
+        speechSynthesis.speak(utterance);
+    }
+    
+    function processAnswer(card, choice) {
+        const questionIndex = Array.from(quizContainer.children).indexOf(card);
+        currentQuizData[questionIndex].userChoice = choice;
+
+        const isCorrect = choice !== null && choice === card.dataset.correctAnswer;
+        if(isCorrect) score++;
+        revealAnswer(card, isCorrect);
+        answeredCount++;
+        updateStats();
+        
+        if (answeredCount === totalQuestions && timerMode !== 'challenge') {
+            clearInterval(timerInterval);
+            globalTimerContainer.style.display = 'none';
+            setTimeout(showFinalScore, 800);
+        } else if (timerMode === 'perQuestion') {
+            startTimerForQuestion(answeredCount);
+        }
+    }
+
+    function revealAnswer(card, isCorrect) {
+        card.classList.add('revealed');
+        card.querySelectorAll('.action-btn').forEach(b => b.disabled = true);
+        const resultContainer = card.querySelector('.result-container');
+        const questionIndex = Array.from(quizContainer.children).indexOf(card);
+        
+        resultContainer.innerHTML = `
+            <i class="fa-solid ${isCorrect ? 'fa-circle-check' : 'fa-circle-xmark'} result-icon ${isCorrect ? 'correct' : 'incorrect'}"></i>
+            <p class="correction-text ${isCorrect ? 'correct' : 'incorrect'}">${currentQuizData[questionIndex].correction}</p>`;
+
+        const explanationBtn = card.querySelector('.explanation-btn');
+        if (currentQuizData[questionIndex].explanation) {
+            explanationBtn.style.display = 'inline-flex';
+        }
+
+        const copyAnswerBtn = card.querySelector('.copy-answer-btn');
+        if (copyAnswerBtn) {
+            copyAnswerBtn.style.display = 'inline-flex';
+        }
+    }
+
+    function showAllAnswers() {
+        clearInterval(timerInterval);
+        clearInterval(challengeTimerInterval);
+        if (timerMode !== 'none') globalTimerContainer.style.display = 'none';
+        quizContainer.querySelectorAll('.question-card').forEach((card, index) => {
+            if (!card.classList.contains('revealed')) {
+                revealAnswer(card, false);
+            }
+        });
+        score = 0;
+        answeredCount = totalQuestions;
+        updateStats();
+        showAllBtn.style.display = 'none';
+        hideAllBtn.style.display = 'inline-flex';
+    }
+    
+    function hideAllAnswers() {
+        quizContainer.querySelectorAll('.question-card.revealed').forEach(card => {
+            card.classList.remove('revealed');
+            card.querySelectorAll('.action-btn').forEach(b => b.disabled = false);
+            card.querySelector('.explanation-btn').style.display = 'none';
+            card.querySelector('.copy-answer-btn').style.display = 'none';
+            const resultContainer = card.querySelector('.result-container');
+            if (resultContainer) resultContainer.innerHTML = '';
+        });
+        score = 0; answeredCount = 0;
+        updateStats();
+        hideAllBtn.style.display = 'none';
+        showAllBtn.style.display = 'inline-flex';
+        if (timerMode === 'perQuestion') {
+            globalTimerContainer.style.display = 'flex';
+            startTimerForQuestion(0);
+        }
+    }
+    
+    function updateStats() {
+        const currentTotal = quizContainer.children.length || totalQuestions;
+        scoreText.textContent = `النَّتِيجَةُ: ${score} / ${currentTotal}`;
+        const progress = currentTotal > 0 ? (answeredCount / currentTotal) * 100 : 0;
+        progressBarTop.style.width = `${progress}%`;
+    }
+
+    function showFinalScore() {
+        clearInterval(timerInterval);
+        clearInterval(challengeTimerInterval);
+        speechSynthesis.cancel();
+        modal.classList.add('visible');
+        const finalScoreText = document.getElementById('final-score-text');
+        const finalMessage = document.getElementById('final-message');
+        const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+        let message, color;
+        if (percentage >= 90) { message = "نَتِيجَةٌ مُمْتَازَةٌ!"; color = 'var(--correct-color)'; } 
+        else if (percentage >= 70) { message = "عَمَلٌ جَيِّدٌ! وَاصِلْ عَلَى هَذَا الْمِنْوَالِ."; color = '#f57c00'; } 
+        else { message = "لَا بَأْسَ، الْمُحَاوَلَةُ الْقَادِمَةُ سَتَكُونُ أَفْضَلَ!"; color = 'var(--incorrect-color)'; }
+        finalScoreText.textContent = `${score} مِنْ ${totalQuestions} (${percentage}%)`;
+        finalMessage.textContent = message; finalMessage.style.color = color;
+        displayRandomHadith(hadithEnd);
+    }
+
+    function resetQuiz() {
+        clearInterval(timerInterval);
+        clearInterval(challengeTimerInterval);
+        speechSynthesis.cancel();
+        modal.classList.remove('visible');
+        quizWrapper.style.display = 'none'; 
+        document.getElementById('main-container').classList.remove('quiz-active');
+        quizSetup.style.display = 'block';
+        quizContainer.innerHTML = '';
+        globalTimerContainer.style.display = 'none';
+        hideAllBtn.style.display = 'none';
+        showAllBtn.style.display = 'inline-flex';
+        displayRandomHadith(hadithStart);
+    }
+    
+    function changeFontSize(direction) {
+        const htmlElement = document.documentElement;
+        const currentSize = parseFloat(window.getComputedStyle(htmlElement).fontSize);
+        const step = 1, minSize = 14, maxSize = 22;
+        let newSize = (direction === 'increase') ? Math.min(maxSize, currentSize + step) : Math.max(minSize, currentSize - step);
+        htmlElement.style.fontSize = `${newSize}px`;
+    }
+
+    function generateResultContent() {
+        const finalScore = document.getElementById('final-score-text').textContent;
+        const hadithText = document.getElementById('hadith-display-end').querySelector('.hadith-text').textContent;
+        const hadithSource = document.getElementById('hadith-display-end').querySelector('.hadith-source').textContent;
+
+        let questionsHtml = currentQuizData.map((item, index) => {
+            const userAnswerText = item.userChoice === 'correct' ? 'صَحٌّ' : (item.userChoice === 'incorrect' ? 'خَطَأٌ' : 'لَمْ تُجِبْ');
+            const isUserCorrect = item.userChoice === item.answer;
+            const answerClass = isUserCorrect ? 'user-answer-correct' : 'user-answer-incorrect';
+            const icon = isUserCorrect ? '✔' : '✖';
+
+            return `
+                <div>
+                    <p><strong>السُّؤَالُ ${index + 1}:</strong> ${item.statement}</p>
+                    <p class="print-answer">
+                        <strong>إِجَابَتُكَ:</strong> 
+                        <span class="${answerClass}">${userAnswerText} ${item.userChoice ? icon : ''}</span>
+                    </p>
+                    <p class="print-answer"><strong>التَّصْوِيبُ:</strong> ${item.correction}</p>
+                </div>`;
+        }).join('');
+
+        return `
+            <div class="result-summary"><strong>نَتِيجَتُكَ النِّهَائِيَّةُ:</strong> ${finalScore}</div>
+            ${questionsHtml}
+            <div class="hadith-section">
+                <p>${hadithText}</p>
+                <p class="print-source">${hadithSource}</p>
+            </div>
+        `;
+    }
+    
+    function generateResultContentTxt() {
+        const finalScore = document.getElementById('final-score-text').textContent;
+        const hadithText = document.getElementById('hadith-display-end').querySelector('.hadith-text').textContent;
+        const hadithSource = document.getElementById('hadith-display-end').querySelector('.hadith-source').textContent;
+        const title = "نَتِيجَةُ اخْتِبَارِ الدَّرْسِ الْسَّابِعِ";
+        const separator = "=".repeat(35);
+
+        let questionsText = currentQuizData.map((item, index) => {
+            const userAnswerText = item.userChoice === 'correct' ? 'صَحٌّ' : (item.userChoice === 'incorrect' ? 'خَطَأٌ' : 'لَمْ تُجِبْ');
+            const isUserCorrect = item.userChoice === item.answer;
+            const icon = isUserCorrect ? '[✔]' : '[✖]';
+            
+            return `
+----------------------------------
+السُّؤَالُ ${index + 1}: ${item.statement}
+إِجَابَتُكَ: ${userAnswerText} ${item.userChoice ? icon : ''}
+التَّصْوِيبُ: ${item.correction}
+            `.trim();
+        }).join('\n');
+
+        return `
+${separator}
+${title}
+${separator}
+
+النَّتِيجَةُ النِّهَائِيَّةُ: ${finalScore}
+
+تَفْصِيلُ الْإِجَابَاتِ:
+${questionsText}
+
+---
+خَتَامًا، حَدِيثٌ فِي فَضْلِ الْعِلْمِ:
+${hadithText}
+(${hadithSource})
+---
+        `.trim();
+    }
+
+    function prepareAndPrint(title, contentGenerator) {
+        printContent.innerHTML = `<h1>${title}</h1>${contentGenerator()}`;
+        window.print();
+        printContent.innerHTML = '';
+    }
+    
+    async function exportToPdf(button, fileName, title, contentGenerator) {
+        const icon = button.querySelector('i');
+        const originalIconClass = icon.className;
+        button.disabled = true;
+        icon.className = 'fa-solid fa-spinner fa-spin';
+        try {
+            printContent.innerHTML = `<h1>${title}</h1>${contentGenerator()}`;
+            printContent.classList.add('pdf-export-prepare');
+            const canvas = await html2canvas(printContent, { scale: 2, useCORS: true, width: printContent.scrollWidth, height: printContent.scrollHeight });
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const imgHeight = canvas.height * pdfWidth / canvas.width;
+            let heightLeft = imgHeight, position = 0;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+            heightLeft -= pdf.internal.pageSize.getHeight();
+            while (heightLeft > 0) {
+                position = -heightLeft;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdf.internal.pageSize.getHeight();
+            }
+            pdf.save(fileName);
+        } catch (error) { console.error("PDF export failed:", error); alert("عُذْرًا، حَدَثَ خَطَأٌ."); } 
+        finally {
+            printContent.classList.remove('pdf-export-prepare');
+            printContent.innerHTML = '';
+            button.disabled = false;
+            icon.className = originalIconClass;
+        }
+    }
+
+    function exportToTxt(fileName, contentGenerator) {
+        const textContent = contentGenerator();
+        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+    
+    const maxQuestions = fullQuizData.length;
+    slider.max = maxQuestions;
+    slider.value = Math.min(15, maxQuestions);
+    sliderValue.textContent = slider.value;
+    
+    slider.addEventListener('input', () => sliderValue.textContent = slider.value);
+    startBtn.addEventListener('click', startQuiz);
+    quizContainer.addEventListener('click', handleQuizInteraction);
+    resetBtn.addEventListener('click', resetQuiz);
+    playAgainBtn.addEventListener('click', resetQuiz);
+    showAllBtn.addEventListener('click', showAllAnswers);
+    hideAllBtn.addEventListener('click', hideAllAnswers);
+    decreaseFontBtn.addEventListener('click', () => changeFontSize('decrease'));
+    increaseFontBtn.addEventListener('click', () => changeFontSize('increase'));
+    
+    function setTimerMode(mode) {
+        timerMode = mode;
+        const options = timerOptionsMenu.querySelectorAll('.settings-option');
+        options.forEach(opt => {
+            if (opt.dataset.mode === mode) {
+                opt.classList.add('selected');
+                currentTimerModeSpan.textContent = opt.textContent.trim();
+            } else {
+                opt.classList.remove('selected');
+            }
+        });
+        timerOptionsMenu.classList.remove('visible');
+    }
+
+    timerOptionsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        timerOptionsMenu.classList.toggle('visible');
+    });
+
+    timerOptionsMenu.addEventListener('click', (e) => {
+        const button = e.target.closest('.settings-option');
+        if (button && button.dataset.mode) {
+            setTimerMode(button.dataset.mode);
+        }
+    });
+
+    setTimerMode('none'); 
+    
+    settingsBtn.addEventListener('click', (e) => { e.stopPropagation(); settingsMenu.classList.toggle('visible'); });
+    exportPrintBtn.addEventListener('click', (e) => { e.stopPropagation(); exportPrintMenu.classList.toggle('visible'); });
+    fontSizeBtn.addEventListener('click', (e) => { e.stopPropagation(); fontSizeMenu.classList.toggle('visible'); });
+    exportResultBtn.addEventListener('click', (e) => { e.stopPropagation(); resultExportMenu.classList.toggle('visible'); });
+
+    document.addEventListener('click', (e) => {
+        if (!settingsMenu.contains(e.target) && !settingsBtn.contains(e.target)) settingsMenu.classList.remove('visible');
+        if (!exportPrintMenu.contains(e.target) && !exportPrintBtn.contains(e.target)) exportPrintMenu.classList.remove('visible');
+        if (!fontSizeMenu.contains(e.target) && !fontSizeBtn.contains(e.target)) fontSizeMenu.classList.remove('visible');
+        if (!resultExportMenu.contains(e.target) && !exportResultBtn.contains(e.target)) resultExportMenu.classList.remove('visible');
+        if (!timerOptionsMenu.contains(e.target) && !timerOptionsBtn.contains(e.target)) timerOptionsMenu.classList.remove('visible');
+    });
+    
+    const getActiveData = () => quizContainer.children.length > 0 ? currentQuizData : [];
+
+    const exportButtons = [
+        { id: 'view-favorites-btn', action: () => { 
+            const favorites = getFavorites();
+            favoritesList.innerHTML = favorites.length > 0 ? favorites.map(fav => `<li>${fav}</li>`).join('') : '<li>لَا تُوجَدُ أَسْئِلَةٌ فِي الْمُفَضَّلَةِ.</li>';
+            favoritesModal.classList.add('visible');
+        }},
+        { id: 'print-hadiths-menu', action: () => { prepareAndPrint('أَحَادِيثُ وَآثَارٌ فِي فَضْلِ الْعِلْمِ', () => hadithLibrary.map((h, i) => `<div><p><strong>${i+1}.</strong> ${h.text}</p><p class="print-source">${h.source}</p></div>`).join('')); }},
+        { id: 'export-pdf-hadiths-menu', action: (e) => { exportToPdf(e.currentTarget, 'hadith-al-ilm.pdf', 'أَحَادِيثُ وَآثَارٌ فِي فَضْلِ الْعِلْمِ', () => hadithLibrary.map((h, i) => `<div><p><strong>${i+1}.</strong> ${h.text}</p><p class="print-source">${h.source}</p></div>`).join('')); }},
+        { id: 'export-txt-hadiths-menu', action: () => { exportToTxt('hadith-al-ilm.txt', () => hadithLibrary.map((h, i) => `${i + 1}. ${h.text}\n(${h.source})`).join('\n\n')); }},
+        { id: 'print-all-questions-menu', action: () => { prepareAndPrint('كَامِلُ أَسْئِلَةِ الدَّرْسِ الْسَّابِعِ', () => fullQuizData.map((item, i) => `<div><p><strong>${i + 1}.</strong> ${item.statement}</p></div>`).join('')); }},
+        { id: 'print-all-answers-menu', action: () => { prepareAndPrint('كَامِلُ أَجْوِبَةِ الدَّرْسِ الْسَّابِعِ', () => fullQuizData.map((item, i) => `<div><p><strong>${i + 1}.</strong> ${item.statement}</p><p class="print-answer"><strong>الْإِجَابَةُ:</strong> ${item.correction}</p></div>`).join('')); }},
+        { id: 'export-pdf-all-questions-menu', action: (e) => { exportToPdf(e.currentTarget, 'dars-7-questions.pdf', 'كَامِلُ أَسْئِلَةِ الدَّرْسِ الْسَّابِعِ', () => fullQuizData.map((item, i) => `<div><p><strong>${i+1}.</strong> ${item.statement}</p></div>`).join('')); }},
+        { id: 'export-pdf-all-answers-menu', action: (e) => { exportToPdf(e.currentTarget, 'dars-7-answers.pdf', 'كَامِلُ أَجْوِبَةِ الدَّرْسِ الْسَّابِعِ', () => fullQuizData.map((item, i) => `<div><p><strong>${i+1}.</strong> ${item.statement}</p><p class="print-answer"><strong>الْإِجَابَةُ:</strong> ${item.correction}</p></div>`).join('')); }},
+        { id: 'export-txt-all-questions-menu', action: () => { exportToTxt('dars-7-questions.txt', () => fullQuizData.map((item, i) => `${i + 1}. ${item.statement}`).join('\n\n')); }},
+        { id: 'export-txt-all-answers-menu', action: () => { exportToTxt('dars-7-answers.txt', () => fullQuizData.map((item, i) => `السُّؤَالُ ${i + 1}: ${item.statement}\nالتَّصْوِيبُ: ${item.correction}`).join('\n\n')); }},
+        { id: 'print-questions-btn', action: () => { if(getActiveData().length > 0) prepareAndPrint('أَسْئِلَةُ الْاخْتِبَارِ الْحَالِيِّ', () => getActiveData().map((item, i) => `<div><p><strong>${i+1}.</strong> ${item.statement}</p></div>`).join('')); }},
+        { id: 'print-answers-btn', action: () => { if(getActiveData().length > 0) prepareAndPrint('أَجْوِبَةُ الْاخْتِبَارِ الْحَالِيِّ', () => getActiveData().map((item, i) => `<div><p><strong>${i+1}.</strong> ${item.statement}</p><p class="print-answer"><strong>الْإِجَابَةُ:</strong> ${item.correction}</p></div>`).join('')); }},
+        { id: 'export-pdf-questions-btn', action: (e) => { if(getActiveData().length > 0) exportToPdf(e.currentTarget, 'quiz-questions.pdf', 'أَسْئِلَةُ الْاخْتِبَارِ الْحَالِيِّ', () => getActiveData().map((item, i) => `<div><p><strong>${i+1}.</strong> ${item.statement}</p></div>`).join('')); }},
+        { id: 'export-pdf-answers-btn', action: (e) => { if(getActiveData().length > 0) exportToPdf(e.currentTarget, 'quiz-answers.pdf', 'أَجْوِبَةُ الْاخْتِبَارِ الْحَالِيِّ', () => getActiveData().map((item, i) => `<div><p><strong>${i+1}.</strong> ${item.statement}</p><p class="print-answer"><strong>الْإِجَابَةُ:</strong> ${item.correction}</p></div>`).join('')); }},
+        { id: 'export-txt-questions-btn', action: () => { if(getActiveData().length > 0) exportToTxt('quiz-questions.txt', () => getActiveData().map((item, i) => `${i + 1}. ${item.statement}`).join('\n\n')); }},
+        { id: 'export-txt-answers-btn', action: () => { if(getActiveData().length > 0) exportToTxt('quiz-answers.txt', () => getActiveData().map((item, i) => `السُّؤَالُ ${i + 1}: ${item.statement}\nالتَّصْوِيبُ: ${item.correction}`).join('\n\n')); }},
+        { id: 'print-result-btn', action: () => { prepareAndPrint('نَتِيجَةُ اخْتِبَارِ الدَّرْسِ الْسَّابِعِ', generateResultContent); }},
+        { id: 'export-pdf-result-btn', action: (e) => { exportToPdf(e.currentTarget, 'dars-7-result.pdf', 'نَتِيجَةُ اخْتِبَارِ الدَّرْسِ الْسَّابِعِ', generateResultContent); }},
+        { id: 'export-txt-result-btn', action: () => { exportToTxt('dars-7-result.txt', generateResultContentTxt); }}
+    ];
+    exportButtons.forEach(({id, action}) => document.getElementById(id).addEventListener('click', action));
+
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) document.getElementById('stats-and-controls').classList.add('touch-active');
+    
+    displayRandomHadith(hadithStart);
+});
+</script>
+
+</body>
+</html>
