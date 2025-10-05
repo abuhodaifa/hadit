@@ -1123,12 +1123,12 @@ document.addEventListener('DOMContentLoaded', () => {
             state.player1Score = 0; state.player2Score = 0; state.currentPlayer = 1;
             const questionsPerPlayer = parseInt(document.getElementById('competition-question-count-slider').value, 10);
             state.totalQuestions = questionsPerPlayer * 2;
-            state.currentQuizData = [...fullQuizData].sort(() => 0.5 - Math.random()).slice(0, state.totalQuestions);
+            state.currentQuizData = [...fullQuizData].sort(() => 30 - Math.random()).slice(0, state.totalQuestions);
             state.quizSessionLog = state.currentQuizData.map(q => ({ ...q, attempts: [] }));
             quizContainer.innerHTML = '';
             showNextCompetitionQuestion();
         } else if (state.quizMode === CONSTS.QUIZ_MODES.GUIDED || (state.quizMode === CONSTS.QUIZ_MODES.NORMAL && state.timerMode === CONSTS.TIMER_MODES.MARATHON)) {
-            state.currentQuizData = [...fullQuizData].sort(() => 0.5 - Math.random());
+            state.currentQuizData = [...fullQuizData].sort(() => 30 - Math.random());
             state.marathonIndex = 0; state.quizSessionLog = [];
             if (state.timerMode === CONSTS.TIMER_MODES.MARATHON) {
                 if (state.marathonHasTimer) globalTimerContainer.style.display = 'flex';
@@ -1147,7 +1147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         resetQuiz(); return;
                     }
                 } else {
-                    questionsToLoad = [...fullQuizData].sort(() => 0.5 - Math.random());
+                    questionsToLoad = [...fullQuizData].sort(() => 30 - Math.random());
                     if(state.quizMode === CONSTS.QUIZ_MODES.NORMAL && state.timerMode === CONSTS.TIMER_MODES.NONE) {
                         questionsToLoad = questionsToLoad.slice(0, parseInt(tfSlider.value, 10));
                     }
@@ -2140,4 +2140,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 
 </html>
+
 
